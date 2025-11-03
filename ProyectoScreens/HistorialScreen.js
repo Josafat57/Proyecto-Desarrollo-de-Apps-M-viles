@@ -1,16 +1,34 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 
-export default function HistorialScreen({ navigation }) {
+export default function HistorialScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Historial de transacciones</Text>
-      <ScrollView style={styles.lista}>
-        <Text style={styles.item}>+ $200 en tiendas Oxxo — 25/09 a las 09:53 hrs</Text>
-        <Text style={styles.item}>+ $1,000 en tiendas Asturiano — 20/09 a las 19:38 hrs</Text>
-        <Text style={styles.item}>- $58.35 en Oxxo UPQ — Categoría: Supermercado</Text>
-        <Text style={styles.item}>- $91.00 en La Mattina 2 — Categoría: Restaurante y bar</Text>
-        <Text style={styles.item}>- $54.00 en FarmaPronto — Categoría: Salud y deporte</Text>
+
+      <Text style={styles.header}>App+</Text>
+
+      <View style={styles.botones}>
+        <TouchableOpacity style={styles.btn}>
+          <Text style={styles.btnText}>Listar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn}>
+          <Text style={styles.btnText}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn}>
+          <Text style={styles.btnText}>Eliminar</Text>
+        </TouchableOpacity>
+      </View>
+
+     
+      <ScrollView style={styles.caja}>
+        <Text style={styles.titulo}>Aquí está tu historial</Text>
+        <Text style={styles.subtitulo}>Ingresos y gastos</Text>
+
+        <Text style={styles.item}>+ $200 en tiendas Oxxo {"\n"}25/09 a las 09:53 hrs</Text>
+        <Text style={styles.item}>+ $1,000 en tiendas Asturiano {"\n"}20/09 a las 19:38 hrs</Text>
+        <Text style={styles.item}>- $58.35 en Oxxo UPQ {"\n"}Categoría: Supermercado {"\n"}22/09 a las 15:16 hrs</Text>
+        <Text style={styles.item}>- $91.00 en La Mattina 2 {"\n"}Categoría: Restaurantes y bares {"\n"}25/09 a las 10:19 hrs</Text>
+        <Text style={styles.item}>- $54.00 en FarmaPronto {"\n"}Categoría: Salud y deporte {"\n"}28/09 a las 17:58 hrs</Text>
       </ScrollView>
     </View>
   );
@@ -21,26 +39,47 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
     padding: 20,
-    paddingTop: 50,
   },
-  volver: {
-    color: '#4caf50',
-    marginBottom: 10,
-    fontSize: 16,
-  },
-  titulo: {
+  header: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: 24,
+    textAlign: 'center',
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  lista: {
-    backgroundColor: '#111',
-    borderRadius: 10,
+  botones: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 15,
+  },
+  btn: {
+    backgroundColor: '#333',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+  },
+  btnText: {
+    color: '#fff',
+    fontSize: 14,
+  },
+  caja: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
     padding: 15,
   },
+  titulo: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  subtitulo: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 15,
+  },
   item: {
-    color: '#fff',
-    marginBottom: 10,
+    marginBottom: 12,
+    fontSize: 14,
+    color: '#000',
   },
 });
