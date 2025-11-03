@@ -4,23 +4,44 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 export default function PaginaInicioScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>¡Bienvenido!</Text>
+
+     
+      <View style={styles.App}>
+        <Text style={styles.AppTexto}>App+</Text>
+      </View>
+
+      <View style={styles.contenido}>
+        
     
-      <Text style={styles.saldo}>Saldo actual: $2,000</Text>
+        <View style={styles.recuadro}>
+          <Text style={styles.titulo}>¡Hola, Mario! </Text>
+          <Text style={styles.subtitulo}>
+            Gracias por elegir nuestra aplicación, es hora de administrar tu dinero
+          </Text>
 
-      <Text style={styles.pregunta}>¿Qué acción quieres hacer hoy?</Text>
+          <Text style={styles.SaldoTexto}>Saldo actual:</Text>
+          <Text style={styles.saldo}>$2,000</Text>
+        </View>
 
-      <TouchableOpacity style={styles.boton}>
-        <Text style={styles.textoBoton}>Ingresar</Text>
-      </TouchableOpacity>
+      
+        <View style={styles.recuadro}>
+          <Text style={styles.pregunta}>¿Qué acción quieres hacer hoy?</Text>
 
-      <TouchableOpacity style={styles.boton}>
-        <Text style={styles.textoBoton}>Retirar</Text>
-      </TouchableOpacity>
-       
-      <TouchableOpacity style={styles.boton}>
-        <Text style={styles.textoBoton}>Historial de transacciones</Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.boton}>
+            <Text style={styles.textoBoton}>Ingresar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.boton}>
+            <Text style={styles.textoBoton}>Retirar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.boton}>
+            <Text style={styles.textoBoton}>Historial de transacciones</Text>
+          </TouchableOpacity>
+        </View>
+
+      </View>
+
     </View>
   );
 }
@@ -28,35 +49,71 @@ export default function PaginaInicioScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
-    padding: 20,
-    justifyContent: 'center',
+    backgroundColor: '#000', // fondo negro
   },
-  titulo: {
-    color: '#fff',
-    fontSize: 26,
+
+  App: {
+    paddingTop: 45,
+    paddingBottom: 15,
+    backgroundColor: '#000',
+    alignItems: 'center',
+  },
+  AppTexto: {
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 5,
+    color: '#fff'
+  },
+
+  contenido: {
+    padding: 15,
+  },
+
+  recuadro: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 12,
+    marginBottom: 20,
+  },
+
+  titulo: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 4,
+  },
+  subtitulo: {
+    color: '#555',
+    marginBottom: 15,
+  },
+  SaldoTexto: {
+    fontSize: 14,
+    color: '#000',
+    fontWeight: '600',
   },
   saldo: {
-    color: '#4caf50',
-    fontSize: 20,
-    marginBottom: 30,
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#000',
+    marginTop: 2,
   },
+
   pregunta: {
-    color: '#fff',
-    fontSize: 18,
-    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 15,
+    color: '#000',
   },
+
   boton: {
-    backgroundColor: '#007bff',
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 5,
+    backgroundColor: '#007AFF', // azul iOS de la foto
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 10,
   },
   textoBoton: {
     color: '#fff',
-    textAlign: 'center',
     fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });
