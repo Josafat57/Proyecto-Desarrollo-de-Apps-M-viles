@@ -22,7 +22,7 @@ export default function Ingresar({ navigation }) {
       {/* Barra inferior con App+ */}
       <View style={styles.bottomBar}>
         <Image 
-          source={require('../assets/enemie.png')} 
+          source={require('../assets/logo.png')} 
           style={styles.bottomImage}
           resizeMode="contain"
         />
