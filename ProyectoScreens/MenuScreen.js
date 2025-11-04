@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import InicioSesion from './InicioSesion';
 import PaginaInicioScreen from './PaginaInicioScreen';
 import HistorialScreen from './HistorialScreen';
+import GraficaScreen from './GraficaScreen';
+import PerfilScreen from './PerfilScreen';
 
 export default function MenuScreen() {
     const [screen, setScreen]= useState('menu');
@@ -17,6 +19,13 @@ export default function MenuScreen() {
         
         case 'historial':
             return <HistorialScreen></HistorialScreen>;
+        
+        case 'grafica':
+            return <GraficaScreen></GraficaScreen>;
+
+        case 'Perfil':
+            return <PerfilScreen></PerfilScreen>;
+
         case 'menu':
             default:
             return (
@@ -26,6 +35,8 @@ export default function MenuScreen() {
                         <Button onPress={()=>setScreen('InicioSesion')} title='Inicio de Sesión'></Button>
                         <Button onPress={()=>setScreen('PaginaInicio')} title='Pagina de Inicio'></Button>
                         <Button onPress={()=>setScreen('historial')} title='Historial de transaccciones'></Button>
+                        <Button onPress={()=>setScreen('grafica')} title='Gráfica de Gastos'></Button>
+                        <Button onPress={()=>setScreen('Perfil')} title='Perfil de Usuario'></Button>
                     </View>
                 </View>
             )
@@ -35,12 +46,12 @@ export default function MenuScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#448b7aff',
+        backgroundColor: '#000000ff',
         alignItems: 'center',
         justifyContent: 'center',
     },
     menu1:{
-        color: '#ff9900ff',
+        color: '#ffffffff',
         fontSize:40,
         fontFamily:'Roboto',
         fontWeight:'bold',
