@@ -19,7 +19,6 @@ export default function Ingresar({ navigation }) {
         <Text style={styles.amount}>$ 0.00</Text>
       </View>
 
-      {/* Barra inferior con App+ */}
       <View style={styles.bottomBar}>
         <Image 
           source={require('../assets/logo.png')} 
