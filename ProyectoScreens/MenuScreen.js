@@ -2,6 +2,7 @@ import { Text, StyleSheet, View, Button } from 'react-native'
 import React, { useState } from 'react'
 
 import InicioSesion from './InicioSesion';
+import RegistroScreen from './RegistroScreen';
 import PaginaInicioScreen from './PaginaInicioScreen';
 import HistorialScreen from './HistorialScreen';
 import GraficaScreen from './GraficaScreen';
@@ -13,6 +14,9 @@ export default function MenuScreen() {
     switch(screen){
         case 'InicioSesion':
             return <InicioSesion></InicioSesion>;
+
+        case 'RegistroScreen':
+            return <RegistroScreen></RegistroScreen>
         
         case 'PaginaInicio':
             return <PaginaInicioScreen></PaginaInicioScreen>;
@@ -33,6 +37,7 @@ export default function MenuScreen() {
                     <Text style={styles.menu1}>Menú de Screens Proyecto</Text>
                     <View style={styles.botonesContainer1}>
                         <Button onPress={()=>setScreen('InicioSesion')} title='Inicio de Sesión'></Button>
+                        <Button onPress={()=>setScreen('RegistroScreen')} title='Registro de sesión'></Button>
                         <Button onPress={()=>setScreen('PaginaInicio')} title='Pagina de Inicio'></Button>
                         <Button onPress={()=>setScreen('historial')} title='Historial de transaccciones'></Button>
                         <Button onPress={()=>setScreen('grafica')} title='Gráfica de Gastos'></Button>
