@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-export default function Ingresar({ navigation }) {
+const Ingresar = () => {
   return (
     <View style={styles.container}>
 
@@ -21,7 +21,7 @@ export default function Ingresar({ navigation }) {
 
       <View style={styles.bottomBar}>
         <Image 
-          source={require('../assets/logo.png')} 
+          source={{ uri: 'https://i.postimg.cc/8cnT4np5/logo.png' }} 
           style={styles.bottomImage}
           resizeMode="contain"
         />
@@ -103,3 +103,5 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   }
 });
+
+export default Ingresar;

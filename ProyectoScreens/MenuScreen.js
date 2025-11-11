@@ -7,6 +7,8 @@ import PaginaInicioScreen from './PaginaInicioScreen';
 import HistorialScreen from './HistorialScreen';
 import GraficaScreen from './GraficaScreen';
 import PerfilScreen from './PerfilScreen';
+import RetirarDineroScreen from './RetirarDineroScreen';
+import IngresarDineroScreen from './IngresarDineroScreen';
 
 export default function MenuScreen() {
     const [screen, setScreen]= useState('menu');
@@ -29,6 +31,12 @@ export default function MenuScreen() {
 
         case 'Perfil':
             return <PerfilScreen></PerfilScreen>;
+        
+        case 'retirar':
+            return <RetirarDineroScreen></RetirarDineroScreen>;
+        
+        case 'ingresar':
+            return <IngresarDineroScreen></IngresarDineroScreen>;
 
         case 'menu':
             default:
@@ -42,6 +50,8 @@ export default function MenuScreen() {
                         <Button onPress={()=>setScreen('historial')} title='Historial de transaccciones'></Button>
                         <Button onPress={()=>setScreen('grafica')} title='Gráfica de Gastos'></Button>
                         <Button onPress={()=>setScreen('Perfil')} title='Perfil de Usuario'></Button>
+                        <Button onPress={()=>setScreen('retirar')} title='Retirar Dinero'></Button>
+                        <Button onPress={()=>setScreen('ingresar')} title='Ingresar Dinero'></Button>
                     </View>
                 </View>
             )

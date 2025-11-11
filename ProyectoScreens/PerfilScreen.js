@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native'
 
 const GraficaScreen = () => {
   return (
