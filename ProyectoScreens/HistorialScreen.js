@@ -9,10 +9,10 @@ export default function HistorialScreen() {
 
       <View style={styles.botones}>
         <TouchableOpacity style={styles.btn}>
-          <Text style={styles.btnText}>Listar</Text>
+          <Text style={styles.btnText}>Agregar</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn}>
-          <Text style={styles.btnText}>Editar</Text>
+          <Text style={styles.btnText}>Actualizar</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn}>
           <Text style={styles.btnText}>Eliminar</Text>

@@ -9,6 +9,9 @@ import GraficaScreen from './GraficaScreen';
 import PerfilScreen from './PerfilScreen';
 import RetirarDineroScreen from './RetirarDineroScreen';
 import IngresarDineroScreen from './IngresarDineroScreen';
+import OlvidarContrasena from './OlvidarContrasena';
+
+
 
 export default function MenuScreen() {
     const [screen, setScreen]= useState('menu');
@@ -17,8 +20,11 @@ export default function MenuScreen() {
         case 'InicioSesion':
             return <InicioSesion></InicioSesion>;
 
+        case 'OlvidarContrasena':
+            return <OlvidarContrasena></OlvidarContrasena>
+
         case 'RegistroScreen':
-            return <RegistroScreen></RegistroScreen>
+            return <RegistroScreen></RegistroScreen>;
         
         case 'PaginaInicio':
             return <PaginaInicioScreen></PaginaInicioScreen>;
@@ -45,6 +51,7 @@ export default function MenuScreen() {
                     <Text style={styles.menu1}>Menú de Screens Proyecto</Text>
                     <View style={styles.botonesContainer1}>
                         <Button onPress={()=>setScreen('InicioSesion')} title='Inicio de Sesión'></Button>
+                        <Button onPress={()=>setScreen('OlvidarContrasena')} title='Olvidar contraseña'></Button>
                         <Button onPress={()=>setScreen('RegistroScreen')} title='Registro de sesión'></Button>
                         <Button onPress={()=>setScreen('PaginaInicio')} title='Pagina de Inicio'></Button>
                         <Button onPress={()=>setScreen('historial')} title='Historial de transaccciones'></Button>
