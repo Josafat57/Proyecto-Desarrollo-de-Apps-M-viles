@@ -48,21 +48,11 @@ const GraficaScreen = () => {
       </View>
 
       <View style={styles.navBar}>
-        <View style={styles.navIcon}>
-          <Image source={{ uri: 'https://i.postimg.cc/wT7wGbqr/minimal-house-icon-website-symbol-site-sign-ui-home-icon-home-creative-icon-minimalist-vector.jpg' }} style={styles.navLogo} />
-        </View>
-        <View style={styles.navIcon}>
-          <Image source={{ uri: 'https://i.postimg.cc/L5H8s1XP/images.jpg' }} style={styles.navLogo} />
-        </View>
-        <View style={styles.navIcon}>
-          <Image source={{ uri: 'https://i.postimg.cc/8cnT4np5/logo.png' }} style={styles.navLogo1} />
-        </View>
-        <View style={styles.navIcon}>
-          <Image source={{ uri: 'https://i.postimg.cc/7h6rcMb8/descarga.png' }} style={styles.navLogo} />
-        </View>
-        <View style={styles.navIcon}>
-          <Image source={{ uri: 'https://i.postimg.cc/N0YVS7P0/descarga-1.png' }} style={styles.navLogo} />
-        </View>
+        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/wT7wGbqr/minimal-house-icon-website-symbol-site-sign-ui-home-icon-home-creative-icon-minimalist-vector.jpg' }} style={styles.navLogo} /></View>
+        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/L5H8s1XP/images.jpg' }} style={styles.navLogo} /> </View>
+        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/8cnT4np5/logo.png' }} style={styles.navLogo1} /> </View>
+        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/7h6rcMb8/descarga.png' }} style={styles.navLogo} /> </View>
+        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/N0YVS7P0/descarga-1.png' }} style={styles.navLogo} /> </View>
       </View>
 
       <Text style={styles.footerText}>App+ FINANZAS PERSONALES</Text>

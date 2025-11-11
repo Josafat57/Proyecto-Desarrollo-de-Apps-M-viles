@@ -1,70 +1,96 @@
-import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native'
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 
 const GraficaScreen = () => {
+  const [filtroActivo, setFiltroActivo] = useState('Mes');
+  const MAX_BAR_HEIGHT = 180;
+  const maxValor = Math.max(datos[filtroActivo].ingresos, datos[filtroActivo].gastos);
+  const alturaIngresos = (datos[filtroActivo].ingresos / maxValor) * MAX_BAR_HEIGHT;
+  const alturaGastos = (datos[filtroActivo].gastos / maxValor) * MAX_BAR_HEIGHT;
+
+  const datos = {
+    Mes: { ingresos: 1260, gastos: 203.15 },
+    Semana: { ingresos: 320, gastos: 85.50 },
+    Año: { ingresos: 15200, gastos: 3400.75 },
+  };
+
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Image source={{ uri: 'https://i.postimg.cc/YqjVYCJ9/logo.jpg' }} style={styles.perfil} />
-        <View style={styles.profileCircle} />
-      </View>
-
-      <View style={styles.filters}>
-        <TouchableOpacity style={styles.filterButtonActive}>
-          <Text style={styles.filterTextActive}>Mes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text style={styles.filterText}>Semana</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text style={styles.filterText}>Año</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.graphBox}>
-        <View style={styles.pieChartContainer}>
-          <Image
-            source={{
-              uri: 'https://i.postimg.cc/3Rdp9z7X/Captura-de-pantalla-2025-11-04-014604.png',
-            }}
-            style={styles.pieChartImage}
-          />
+    <View style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.header}>
+          <Image source={{ uri: 'https://i.postimg.cc/YqjVYCJ9/logo.jpg' }} style={styles.perfil} />
+          <View style={styles.profileCircle} />
         </View>
 
-        <Text style={styles.chartTitle}>Ingresos vs Gastos</Text>
+        <View style={styles.filters}>
+          {['Mes', 'Semana', 'Año'].map((filtro) => (
+            <TouchableOpacity
+              key={filtro}
+              style={filtroActivo === filtro ? styles.filterButtonActive : styles.filterButton}
+              onPress={() => setFiltroActivo(filtro)}
+            >
+              <Text style={filtroActivo === filtro ? styles.filterTextActive : styles.filterText}>
+                {filtro}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <View style={styles.graphBox}>
+          <View style={styles.pieChartContainer}>
+            <Image
+              source={{ uri: 'https://i.postimg.cc/3Rdp9z7X/Captura-de-pantalla-2025-11-04-014604.png' }}
+              style={styles.pieChartImage}
+            />
+          </View>
+
+          <Text style={styles.chartTitle}>Ingresos vs Gastos</Text>
 
         <View style={styles.barChart}>
           <View style={styles.barContainer}>
-            <View style={styles.barIngresos} />
-            <Text style={styles.barLabel}>1260</Text>
+            <View style={[styles.barIngresos, { height: alturaIngresos }]} />
+            <Text style={styles.barLabel}>{datos[filtroActivo].ingresos}</Text>
             <Text style={styles.barText}>Ingresos</Text>
           </View>
           <View style={styles.barContainer}>
-            <View style={styles.barGastos} />
-            <Text style={styles.barLabel}>203.15</Text>
+            <View style={[styles.barGastos, { height: alturaGastos }]} />
+            <Text style={styles.barLabel}>{datos[filtroActivo].gastos}</Text>
             <Text style={styles.barText}>Gastos</Text>
           </View>
         </View>
-      </View>
+        </View>
+      </ScrollView>
 
       <View style={styles.navBar}>
-        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/wT7wGbqr/minimal-house-icon-website-symbol-site-sign-ui-home-icon-home-creative-icon-minimalist-vector.jpg' }} style={styles.navLogo} /></View>
-        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/L5H8s1XP/images.jpg' }} style={styles.navLogo} /></View>
-        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/8cnT4np5/logo.png' }} style={styles.navLogo1} /></View>
-        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/7h6rcMb8/descarga.png' }} style={styles.navLogo} /></View>
-        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/N0YVS7P0/descarga-1.png' }} style={styles.navLogo} /></View>
+        <View style={styles.navIcon}>
+          <Image source={{ uri: 'https://i.postimg.cc/wT7wGbqr/minimal-house-icon-website-symbol-site-sign-ui-home-icon-home-creative-icon-minimalist-vector.jpg' }} style={styles.navLogo} />
+        </View>
+        <View style={styles.navIcon}>
+          <Image source={{ uri: 'https://i.postimg.cc/L5H8s1XP/images.jpg' }} style={styles.navLogo} />
+        </View>
+        <View style={styles.navIcon}>
+          <Image source={{ uri: 'https://i.postimg.cc/8cnT4np5/logo.png' }} style={styles.navLogo1} />
+        </View>
+        <View style={styles.navIcon}>
+          <Image source={{ uri: 'https://i.postimg.cc/7h6rcMb8/descarga.png' }} style={styles.navLogo} />
+        </View>
+        <View style={styles.navIcon}>
+          <Image source={{ uri: 'https://i.postimg.cc/N0YVS7P0/descarga-1.png' }} style={styles.navLogo} />
+        </View>
       </View>
-
       <Text style={styles.footerText}>App+ FINANZAS PERSONALES</Text>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#000',
+  screen: {
     flex: 1,
+    backgroundColor: '#000',
+  },
+  scrollContent: {
     paddingTop: 40,
+    paddingBottom: 100,
   },
   header: {
     flexDirection: 'row',
@@ -146,16 +172,13 @@ const styles = StyleSheet.create({
   },
   barIngresos: {
     width: 60,
-    height: 180,
     backgroundColor: '#3498db',
     borderRadius: 8,
   },
   barGastos: {
     width: 60,
-    height: 60,
     backgroundColor: '#2ecc71',
     borderRadius: 8,
-    marginTop: 120,
   },
   barLabel: {
     color: '#000',
@@ -169,11 +192,16 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   navBar: {
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingVertical: 20,
     backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
   },
   navIcon: {
     width: 24,
