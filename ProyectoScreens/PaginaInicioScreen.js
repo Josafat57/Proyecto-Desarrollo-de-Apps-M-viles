@@ -1,7 +1,27 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+
+import RetirarDineroScreen from './RetirarDineroScreen';
+import IngresarDineroScreen from './IngresarDineroScreen';
+import HistorialScreen from './HistorialScreen';
 
 export default function PaginaInicioScreen({ navigation }) {
+
+  const [screen, setScreen]= useState('menu');
+  
+  switch(screen){ 
+    
+    case 'ingresar':
+          return <IngresarDineroScreen volver={() => setScreen('menu')}/>;
+    
+    case 'retirar':
+          return <RetirarDineroScreen volver={() => setScreen('menu')}/>;
+    case 'historial':
+           return <HistorialScreen></HistorialScreen>;
+    
+     case 'menu':
+            default:
+          
   return (
     <View style={styles.container}>
 
@@ -25,25 +45,29 @@ export default function PaginaInicioScreen({ navigation }) {
 
       
         <View style={styles.recuadro}>
-          <Text style={styles.pregunta}>¿Qué acción quieres hacer hoy?</Text>
+           <Text style={styles.pregunta}>¿Qué acción quieres hacer hoy?</Text>
 
-          <TouchableOpacity style={styles.boton}>
-            <Text style={styles.textoBoton}>Ingresar</Text>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.boton} onPress={() => setScreen('ingresar')}>
+            <Text style={styles.textoBoton}>INGRESAR DINERO</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity style={styles.boton}>
-            <Text style={styles.textoBoton}>Retirar</Text>
-          </TouchableOpacity>
+       <TouchableOpacity style={styles.boton} onPress={() => setScreen('retirar')}>
+            <Text style={styles.textoBoton}>RETIRAR DINERO</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity style={styles.boton}>
-            <Text style={styles.textoBoton}>Historial de transacciones</Text>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.boton} onPress={() => setScreen('historial')}>
+            <Text style={styles.textoBoton}>HISTORIAL DE TRANSACCIONES</Text>
+        </TouchableOpacity>
+
+
         </View>
 
       </View>
 
     </View>
   );
+}
+
 }
 
 const styles = StyleSheet.create({
@@ -63,16 +87,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff'
   },
-
   contenido: {
     padding: 15,
   },
-
   recuadro: {
     backgroundColor: '#fff',
-    padding: 20,
+    padding: 30,
     borderRadius: 12,
-    marginBottom: 20,
+    marginBottom:20,
   },
 
   titulo: {
@@ -104,10 +126,10 @@ const styles = StyleSheet.create({
     color: '#000',
   },
 
-  boton: {
-    backgroundColor: '#007AFF', // azul iOS de la foto
+  boton: { 
+    backgroundColor: 'green',
     padding: 14,
-    borderRadius: 8,
+    borderRadius: 22,
     marginBottom: 10,
   },
   textoBoton: {

@@ -1,14 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-const Retirar = () => {
+const RetirarDineroScreen = ({ volver }) => {
   return (
     <View style={styles.container}>
 
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.backArrow}>{`<`}</Text>
-        </TouchableOpacity>
+         <TouchableOpacity onPress={volver}>
+              <Text style={styles.backArrow}>{`<`}</Text>
+          </TouchableOpacity>
         <Text style={styles.headerTitle}>App+</Text>
         <View style={styles.avatar}/>
       </View>
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Retirar;
+export default RetirarDineroScreen;
