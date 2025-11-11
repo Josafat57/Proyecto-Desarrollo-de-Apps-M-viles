@@ -45,7 +45,7 @@ export default function RegistroScreen() {
                         placeholderTextColor="#8E8E93"
                         value={password}
                         onChangeText={setPassword}
-                        // Se quitó secureTextEntry
+                        secureTextEntry={true}
                     />
                     <TextInput
                         style={styles.input}

@@ -3,10 +3,11 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, SafeAreaVie
 
 const logo = require('./assets/logo.png');
 const googleLogo = require('./assets/google.png');
-const appleLogo = require('./assets/apple.png');
+const appleLogo = require('./assets/apple2.png');
 
 export default function InicioSesion() {
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -32,6 +33,21 @@ export default function InicioSesion() {
                         keyboardType="email-address"
                         autoCapitalize="none"
                     />
+
+                    <TextInput
+                        style={styles.input2}
+                        placeholder="Contraseña:"
+                        placeholderTextColor="#8E8E93"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry={true}
+                    />
+
+                    <TouchableOpacity
+                        style={styles.forgotPasswordButton}
+                    >
+                        <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
+                    </TouchableOpacity>
 
                     <TouchableOpacity 
                         style={styles.buttonPrimary} 
@@ -188,5 +204,23 @@ const styles = StyleSheet.create({
     },
     termsLink: {
         color: '#007AFF',
+    },
+    input2: {
+        backgroundColor: '#FFF',
+        color: '#000',
+        borderRadius: 8,
+        paddingVertical: 14,
+        paddingHorizontal: 16,
+        fontSize: 16,
+        marginBottom: 12,
+    },
+    forgotPasswordButton: {
+        alignItems: 'center', 
+        marginBottom: 20, 
+    },
+    forgotPasswordText: {
+        color: '#007AFF',
+        fontSize: 14,
+        fontWeight: '600',
     },
 });
