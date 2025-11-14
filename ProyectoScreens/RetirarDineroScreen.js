@@ -8,11 +8,9 @@ const RetirarDineroScreen = ({ volver }) => {
   const [concepto, setConcepto] = useState('');
 
   const handleRetirar = () => {
-    // Aquí iría la lógica para procesar el retiro
+    
     console.log('Retirando:', { monto, cuentaDestino, concepto });
-    // Cerrar modal después de procesar
     setModalVisible(false);
-    // Limpiar formulario
     setMonto('');
     setCuentaDestino('');
     setConcepto('');
@@ -34,7 +32,7 @@ const RetirarDineroScreen = ({ volver }) => {
         <Text style={styles.cardSubtitle}>Puedes retirar hasta $5,000 en efectivo</Text>
         <Text style={styles.amount}>$ 0.00</Text>
         
-        {/* Botón para abrir el modal */}
+      
         <TouchableOpacity 
           style={styles.retirarButton}
           onPress={() => setModalVisible(true)}
@@ -43,7 +41,7 @@ const RetirarDineroScreen = ({ volver }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Modal para retirar dinero */}
+    
       <Modal
         animationType="slide"
         transparent={true}
