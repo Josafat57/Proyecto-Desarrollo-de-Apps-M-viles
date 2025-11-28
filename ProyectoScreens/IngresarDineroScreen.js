@@ -8,7 +8,7 @@ const IngresarDineroScreen = ({ volver }) => {
   const [concepto, setConcepto] = useState('');
   const [metodoPago, setMetodoPago] = useState('transferencia');
 
-  // useEffect dentro del componente
+  
   useEffect(() => {
     const initializeDB = async () => {
       try {
@@ -87,7 +87,7 @@ const IngresarDineroScreen = ({ volver }) => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
+        <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Ingresar Dinero</Text>
@@ -99,7 +99,9 @@ const IngresarDineroScreen = ({ volver }) => {
               </TouchableOpacity>
             </View>
 
-            <ScrollView style={styles.formContainer}>
+            <ScrollView style={styles.formContainer}
+            contentContainerStyle={styles.scrollcontent}
+            showsVerticalScrollIndicator={false}>
              
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Monto a ingresar</Text>
@@ -316,17 +318,24 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
  
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    maxHeight: '80%'
-  },
+modalOverlay: {  
+  flex: 1,
+  justifyContent: 'flex-end',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)'
+},
+modalContent: {
+  backgroundColor: '#fff',
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+  maxHeight: '90%',
+  width: '100%', 
+  marginHorizontal: 0,  
+},
+
+scrollContent: {
+  padding: 20,
+  paddingBottom: 30
+},
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
