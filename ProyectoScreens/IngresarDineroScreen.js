@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, ScrollView, Alert } from 'react-native';
+import { initDatabase, insertTransaccion } from '../database/Database';
 
 const IngresarDineroScreen = ({ volver }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -7,24 +8,48 @@ const IngresarDineroScreen = ({ volver }) => {
   const [concepto, setConcepto] = useState('');
   const [metodoPago, setMetodoPago] = useState('transferencia');
 
-  const handleIngresarDinero = () => {
-    // Aquí iría la lógica para procesar el ingreso de dinero
-    console.log('Monto:', monto);
-    console.log('Concepto:', concepto);
-    console.log('Método de pago:', metodoPago);
-    
-    
-    setModalVisible(false);
-    setMonto('');
-    setConcepto('');
-    setMetodoPago('transferencia');
+  // useEffect dentro del componente
+  useEffect(() => {
+    const initializeDB = async () => {
+      try {
+        await initDatabase();
+        console.log('Base de datos inicializada');
+      } catch (error) {
+        console.error('Error al inicializar la base de datos:', error);
+        Alert.alert('Error', 'No se pudo inicializar la base de datos.');
+      }
+    };
+    initializeDB();
+  }, []);
+
+  const handleIngresarDinero = async () => {
+    if (!monto || parseFloat(monto) <= 0) {
+      Alert.alert('Error', 'Por favor ingresa un monto valido');
+      return;
+    }
+    try {
+      await insertTransaccion(monto, concepto, metodoPago);
+      Alert.alert('Exito', `se ha ingresado $${monto} a tu cuenta `,
+        [
+          {
+            text: 'ok',
+            onPress: () => {
+              setModalVisible(false);
+              setMonto('');
+              setConcepto('');
+              setMetodoPago('transferencia');
+            }
+          }
+        ]
+      );
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo guardar la transacción');
+    }
   };
 
   const formatMonto = (text) => {
-    
     const cleaned = text.replace(/[^\d.]/g, '');
     
-   
     const parts = cleaned.split('.');
     if (parts.length > 2) {
       return parts[0] + '.' + parts.slice(1).join('');
@@ -226,7 +251,7 @@ const IngresarDineroScreen = ({ volver }) => {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
