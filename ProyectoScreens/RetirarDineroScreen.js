@@ -8,7 +8,6 @@ const RetirarDineroScreen = ({ volver }) => {
   const [concepto, setConcepto] = useState('');
 
   const handleRetirar = () => {
-    
     console.log('Retirando:', { monto, cuentaDestino, concepto });
     setModalVisible(false);
     setMonto('');
