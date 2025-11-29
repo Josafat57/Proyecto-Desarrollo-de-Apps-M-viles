@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, ScrollView, Alert } from 'react-native';
-import { initDatabase, insertTransaccion } from '../database/Database';
+import { initDatabase, insertTransaccion } from './database/Database';
+
 
 const IngresarDineroScreen = ({ volver }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -8,7 +9,6 @@ const IngresarDineroScreen = ({ volver }) => {
   const [concepto, setConcepto] = useState('');
   const [metodoPago, setMetodoPago] = useState('transferencia');
 
-  
   useEffect(() => {
     const initializeDB = async () => {
       try {

@@ -91,6 +91,15 @@ class Database {
 }
 
 
-export default new Database();
+const databaseService = new DatabaseService();
+
+export const initDatabase = () => databaseService.initialize();
+export const insertTransaccion = (monto, concepto, metodoPago, tipo) => 
+    databaseService.insertTransaccion(monto, concepto, metodoPago, tipo);
+export const getAllTransacciones = () => databaseService.getAll();
+export const getBalance = () => databaseService.getBalance();
+
+export default databaseService;
+
 
      
