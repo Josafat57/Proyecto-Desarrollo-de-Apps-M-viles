@@ -1,141 +1,196 @@
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, SafeAreaView, ScrollView, Alert, Platform, StatusBar } from 'react-native';
 import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { getSecurityQuestion, resetPassword } from './database/Database';
 
 const logo = require('./assets/logo.png');
 
 export default function OlvidarContrasena({ navigation }) {
+    const [step, setStep] = useState(1);
     const [email, setEmail] = useState('');
+    const [securityQuestion, setSecurityQuestion] = useState('');
+    const [securityAnswer, setSecurityAnswer] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+
+    const handleCheckEmail = async () => {
+        try {
+            const question = await getSecurityQuestion(email);
+            setSecurityQuestion(question);
+            setStep(2);
+        } catch (error) {
+            Alert.alert("Error", "Correo no encontrado en la base de datos.");
+        }
+    };
+
+    const handleChangePassword = async () => {
+        if (!securityAnswer || !newPassword) {
+            Alert.alert("Error", "Llena todos los campos");
+            return;
+        }
+        try {
+            await resetPassword(email, securityAnswer, newPassword);
+            Alert.alert("¡Éxito!", "Contraseña actualizada. Inicia sesión con tu nueva clave.", [
+                { text: "Ir a Login", onPress: () => navigation.navigate('InicioSesion') }
+            ]);
+        } catch (error) {
+            Alert.alert("Error", "La respuesta de seguridad es incorrecta");
+        }
+    };
 
     return (
         <SafeAreaView style={styles.safeArea}>
+            <View style={styles.headerBar}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backIcon}>
+                    <Ionicons name="arrow-back" size={28} color="#4CD964" />
+                </TouchableOpacity>
+            </View>
+
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.logoContainer}>
-                    <Image source={logo} style={styles.logo}/>
+                    <Image source={logo} style={styles.logo} />
                     <Text style={styles.title}>App+</Text>
-                    <Text style={styles.subtitle}>FINANZAS PERSONALES</Text>
+                    <Text style={styles.subtitle}>RECUPERAR CUENTA</Text>
                 </View>
 
                 <View style={styles.formContainer}>
-                    <Text style={styles.header}>¿Olvidaste tu contraseña?</Text>
-                    <Text style={styles.instructions}>
-                        Introduce tu correo por dónde te enviaremos los pasos a seguir para cambiar tu contraseña
-                    </Text>
+                    {step === 1 ? (
+                        <>
+                            <Text style={styles.header}>Recuperación</Text>
+                            <Text style={styles.instructions}>
+                                Ingresa tu correo para validar tu identidad.
+                            </Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="email@dominio.com"
+                                placeholderTextColor="#8E8E93"
+                                value={email}
+                                onChangeText={setEmail}
+                                autoCapitalize="none"
+                            />
+                            <TouchableOpacity style={styles.buttonPrimary} onPress={handleCheckEmail}>
+                                <Text style={styles.buttonPrimaryText}>Buscar Usuario</Text>
+                            </TouchableOpacity>
+                        </>
+                    ) : (
+                        <>
+                            <Text style={styles.header}>Seguridad</Text>
+                            <Text style={styles.instructions}>Responde la pregunta secreta para crear una nueva clave.</Text>
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="email@dominio.com"
-                        placeholderTextColor="#8E8E93"
-                        value={email}
-                        onChangeText={setEmail}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                    />
+                            <Text style={styles.questionLabel}>{securityQuestion}</Text>
 
-                    <TouchableOpacity 
-                        style={styles.buttonPrimary} 
-                        onPress={() => {
-                            // Aquí iría la lógica real de envío de correo
-                            alert("Se ha enviado un correo con instrucciones");
-                        }}
-                    >
-                        <Text style={styles.buttonPrimaryText}>
-                            Da clic aquí para que se le envíe un correo
-                        </Text>
-                    </TouchableOpacity>
-
-                    {/* Botón para regresar al Login */}
-                    <TouchableOpacity 
-                        style={styles.backButton} 
-                        onPress={() => navigation.navigate('InicioSesion')}
-                    >
-                        <Text style={styles.backButtonText}>Volver al inicio de sesión</Text>
-                    </TouchableOpacity>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Tu respuesta"
+                                placeholderTextColor="#8E8E93"
+                                value={securityAnswer}
+                                onChangeText={setSecurityAnswer}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nueva contraseña"
+                                placeholderTextColor="#8E8E93"
+                                value={newPassword}
+                                onChangeText={setNewPassword}
+                                secureTextEntry
+                            />
+                            <TouchableOpacity style={styles.buttonPrimary} onPress={handleChangePassword}>
+                                <Text style={styles.buttonPrimaryText}>Actualizar Contraseña</Text>
+                            </TouchableOpacity>
+                        </>
+                    )}
                 </View>
             </ScrollView>
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#000',
+        backgroundColor: '#000'
+    },
+    headerBar: {
+        paddingHorizontal: 20,
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10,
+        width: '100%',
+        alignItems: 'flex-start',
+    },
+    backIcon: {
+        padding: 5,
     },
     container: {
         flexGrow: 1,
-        justifyContent: 'center',
         paddingHorizontal: 25,
         paddingBottom: 20,
+        paddingTop: 10
     },
     logoContainer: {
         alignItems: 'center',
-        marginBottom: 30,
+        marginBottom: 20
     },
     logo: {
-        width: 100,
-        height: 100,
+        width: 80,
+        height: 80,
         resizeMode: 'contain',
-        marginBottom: 10,
+        marginBottom: 10
     },
     title: {
         color: '#4CD964',
-        fontSize: 34,
-        fontWeight: 'bold',
+        fontSize: 30,
+        fontWeight: 'bold'
     },
     subtitle: {
         color: '#4CD964',
-        fontSize: 13,
+        fontSize: 12,
         fontWeight: '300',
-        letterSpacing: 1,
+        letterSpacing: 1
     },
     header: {
         color: '#FFF',
-        fontSize: 26,
+        fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: 8,
+        marginBottom: 8
     },
     instructions: {
         color: '#BDBDBD',
-        fontSize: 16,
+        fontSize: 15,
         textAlign: 'center',
-        marginBottom: 25,
+        marginBottom: 20
+    },
+    questionLabel: {
+        color: '#4CD964',
+        fontSize: 18,
+        marginBottom: 15,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        borderWidth: 1,
+        borderColor: '#4CD964',
+        padding: 10,
+        borderRadius: 8,
+        width: '100%'
     },
     input: {
         backgroundColor: '#FFF',
-        color: '#000',
         borderRadius: 8,
-        paddingVertical: 14,
-        paddingHorizontal: 16,
+        padding: 14,
         fontSize: 16,
-        marginBottom: 15,
+        marginBottom: 15
     },
     formContainer: {
         width: '100%',
-        marginBottom: 20,
+        marginBottom: 20
     },
     buttonPrimary: {
         backgroundColor: '#007AFF',
         padding: 15,
         borderRadius: 8,
         alignItems: 'center',
-        marginBottom: 15,
+        marginTop: 10
     },
     buttonPrimaryText: {
         color: '#FFF',
         fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'center',
+        fontWeight: 'bold'
     },
-    backButton: {
-        backgroundColor: '#4CD964',
-        padding: 12,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    backButtonText: {
-        color: '#FFF',
-        fontSize: 14,
-        fontWeight: '600',
-    }
 });

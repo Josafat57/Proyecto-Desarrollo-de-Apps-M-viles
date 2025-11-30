@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import { getBalance } from './database/Database'; 
 
-export default function PaginaInicioScreen({ navigation }) {
+export default function PaginaInicioScreen({ navigation, route }) {
+  const [saldo, setSaldo] = useState(0);
+  
+  const isFocused = useIsFocused();
+
+  const userEmail = route.params?.userEmail || 'Usuario';
+  const nombreMostrar = userEmail.includes('@') ? userEmail.split('@')[0] : userEmail;
+
+  const cargarSaldo = async () => {
+    try {
+      const total = await getBalance();
+      setSaldo(total);
+    } catch (error) {
+      console.error("Error al cargar saldo:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      cargarSaldo();
+    }
+  }, [isFocused]);
+
   return (
     <View style={styles.container}>
       <View style={styles.App}>
@@ -10,13 +34,13 @@ export default function PaginaInicioScreen({ navigation }) {
 
       <View style={styles.contenido}>
         <View style={styles.recuadro}>
-          <Text style={styles.titulo}>¡Hola, Mario! </Text>
+          <Text style={styles.titulo}>¡Hola, {nombreMostrar}! </Text>
           <Text style={styles.subtitulo}>
             Gracias por elegir nuestra aplicación, es hora de administrar tu dinero
           </Text>
 
           <Text style={styles.SaldoTexto}>Saldo actual:</Text>
-          <Text style={styles.saldo}>$2,000</Text>
+          <Text style={styles.saldo}>${saldo.toFixed(2)}</Text>
         </View>
 
         <View style={styles.recuadro}>
@@ -54,7 +78,7 @@ const styles = StyleSheet.create({
   AppTexto: { fontSize: 20, fontWeight: 'bold', color: '#fff' },
   contenido: { padding: 15 },
   recuadro: { backgroundColor: '#fff', padding: 30, borderRadius: 12, marginBottom: 20 },
-  titulo: { fontSize: 22, fontWeight: 'bold', color: '#000', marginBottom: 4 },
+  titulo: { fontSize: 22, fontWeight: 'bold', color: '#000', marginBottom: 4, textTransform: 'capitalize' },
   subtitulo: { color: '#555', marginBottom: 15 },
   SaldoTexto: { fontSize: 14, color: '#000', fontWeight: '600' },
   saldo: { fontSize: 26, fontWeight: 'bold', color: '#000', marginTop: 2 },
