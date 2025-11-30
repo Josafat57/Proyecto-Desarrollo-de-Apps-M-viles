@@ -1,7 +1,57 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { getAllTransacciones } from './database/Database';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function PerfilScreen() {
+  const [gastos, setGastos] = useState({});
+  
+  const presupuestos = {
+    restaurantes: 2000,
+    supermercado: 3000,
+    salud: 1500,
+    servicios: 1000,
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      const cargarDatos = async () => {
+        try {
+          const transacciones = await getAllTransacciones();
+
+          // Agrupamos dinámicamente por concepto
+          const nuevosGastos = {};
+          transacciones
+            .filter(t => t.tipo === 'gasto')
+            .forEach(t => {
+              const concepto = t.concepto?.toLowerCase() || 'otros';
+              if (!nuevosGastos[concepto]) nuevosGastos[concepto] = 0;
+              nuevosGastos[concepto] += t.monto;
+            });
+
+          setGastos(nuevosGastos);
+        } catch (error) {
+          console.error('Error cargando gastos:', error);
+        }
+      };
+
+      cargarDatos();
+    }, [])
+  );
+
+  const renderBudgetItem = (label, gasto, max) => {
+    const porcentaje = Math.min((gasto / max) * 100, 100);
+    return (
+      <View style={styles.budgetItem}>
+        <Text style={styles.budgetLabel}>{label}</Text>
+        <Text style={styles.budgetAmount}>${gasto.toFixed(2)} / ${max}</Text>
+        <View style={styles.progressBar}>
+          <View style={[styles.progressFill, { width: `${porcentaje}%` }]} />
+        </View>
+      </View>
+    );
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -17,37 +67,10 @@ export default function PerfilScreen() {
       <Text style={styles.sectionTitle}>Mi presupuesto mensual</Text>
 
       <View style={styles.budgetBox}>
-        <View style={styles.budgetItem}>
-          <Text style={styles.budgetLabel}>Restaurantes y bares</Text>
-          <Text style={styles.budgetAmount}>$91.00 / $2,000</Text>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: '4.5%' }]} />
-          </View>
-        </View>
-
-        <View style={styles.budgetItem}>
-          <Text style={styles.budgetLabel}>Supermercado</Text>
-          <Text style={styles.budgetAmount}>$58.35 / $3,000</Text>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: '1.9%' }]} />
-          </View>
-        </View>
-
-        <View style={styles.budgetItem}>
-          <Text style={styles.budgetLabel}>Salud y deporte</Text>
-          <Text style={styles.budgetAmount}>$54.00 / $1,500</Text>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: '3.6%' }]} />
-          </View>
-        </View>
-
-        <View style={styles.budgetItem}>
-          <Text style={styles.budgetLabel}>Servicios</Text>
-          <Text style={styles.budgetAmount}>$50.00 / $1,000</Text>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: '5%' }]} />
-          </View>
-        </View>
+        {renderBudgetItem('Restaurantes y bares', gastos['restaurante'] || 0, presupuestos.restaurantes)}
+        {renderBudgetItem('Supermercado', gastos['supermercado'] || 0, presupuestos.supermercado)}
+        {renderBudgetItem('Salud y deporte', gastos['salud'] || 0, presupuestos.salud)}
+        {renderBudgetItem('Servicios', gastos['servicio'] || 0, presupuestos.servicios)}
       </View>
 
       <Text style={styles.footerText}>App+ FINANZAS PERSONALES</Text>
@@ -56,10 +79,13 @@ export default function PerfilScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#000',
-    flex: 1,
-    paddingTop: 40,
+  container: { backgroundColor: '#000', flex: 1, paddingTop: 40 },
+  budgetBox: {
+    backgroundColor: '#fff',
+    marginHorizontal: 20,
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 30,
   },
   header: {
     flexDirection: 'row',
@@ -68,12 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  userName: {
-    marginTop: 10,
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+  userName: { marginTop: 10, color: '#fff', fontSize: 18, fontWeight: 'bold' },
   profileWrapper: {
     width: 40,
     height: 40,
@@ -81,11 +102,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#ccc',
   },
-  profileCircle: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
+  profileCircle: { width: '100%', height: '100%', resizeMode: 'cover' },
   sectionTitle: {
     color: '#fff',
     fontSize: 16,
@@ -94,36 +111,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
   },
-  budgetBox: {
-    backgroundColor: '#fff',
-    marginHorizontal: 20,
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 30,
-  },
-  budgetItem: {
-    marginBottom: 20,
-  },
-  budgetLabel: {
-    color: '#000',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  budgetAmount: {
-    color: '#555',
-    fontSize: 12,
-    marginBottom: 6,
-  },
+  budgetItem: { marginBottom: 20 },
+  budgetLabel: { color: '#000', fontSize: 14, fontWeight: 'bold' },
+  budgetAmount: { color: '#555', fontSize: 12, marginBottom: 6 },
   progressBar: {
     height: 8,
     backgroundColor: '#eee',
     borderRadius: 4,
     overflow: 'hidden',
   },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#FF6F61',
-  },
+  progressFill: { height: '100%', backgroundColor: '#FF6F61' },
   footerText: {
     color: '#fff',
     fontSize: 12,

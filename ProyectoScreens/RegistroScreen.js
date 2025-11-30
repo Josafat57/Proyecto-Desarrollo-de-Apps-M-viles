@@ -97,92 +97,92 @@ export default function RegistroScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { 
-    flex: 1, 
-    backgroundColor: '#000' 
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#000',
   },
-  container: { 
-    flexGrow: 1, 
-    justifyContent: 'center', 
-    paddingHorizontal: 25, 
-    paddingBottom: 20 
+  container: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 25,
+    paddingBottom: 20,
   },
-  logoContainer: { 
-    alignItems: 'center', 
-    marginBottom: 20 
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  logo: { 
-    width: 80, 
-    height: 80, 
-    resizeMode: 'contain', 
-    marginBottom: 10 
+  logo: {
+    width: 80,
+    height: 80,
+    resizeMode: 'contain',
+    marginBottom: 10,
   },
-  title: { 
-    color: '#4CD964', 
-    fontSize: 30, 
-    fontWeight: 'bold' 
+  title: {
+    color: '#4CD964',
+    fontSize: 30,
+    fontWeight: 'bold',
   },
-  subtitle: { 
-    color: '#4CD964', 
-    fontSize: 12, 
-    fontWeight: '300', 
-    letterSpacing: 1 
+  subtitle: {
+    color: '#4CD964',
+    fontSize: 12,
+    fontWeight: '300',
+    letterSpacing: 1,
   },
-  formContainer: { 
-    width: '100%', 
-    marginBottom: 20 
+  formContainer: {
+    width: '100%',
+    marginBottom: 20,
   },
-  header: { 
-    color: '#FFF', 
-    fontSize: 24, 
-    fontWeight: 'bold', 
-    textAlign: 'center', 
-    marginBottom: 8 
+  header: {
+    color: '#FFF',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 8,
   },
-  instructions: { 
-    color: '#BDBDBD', 
-    fontSize: 16, 
-    textAlign: 'center', 
-    marginBottom: 10 
+  instructions: {
+    color: '#BDBDBD',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 10,
   },
-  sectionHeader: { 
-    color: '#4CD964', 
-    fontSize: 14, 
-    marginBottom: 10, 
-    marginTop: 10, 
-    fontWeight: 'bold' 
+  sectionHeader: {
+    color: '#4CD964',
+    fontSize: 14,
+    marginBottom: 10,
+    marginTop: 10,
+    fontWeight: 'bold',
   },
   input: {
-    backgroundColor: '#FFF', 
-    color: '#000', 
+    backgroundColor: '#FFF',
+    color: '#000',
     borderRadius: 8,
-    paddingVertical: 14, 
-    paddingHorizontal: 16, 
-    fontSize: 16, 
-    marginBottom: 12
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    marginBottom: 12,
   },
   buttonPrimary: {
-    backgroundColor: '#007AFF', 
-    padding: 15, 
+    backgroundColor: '#007AFF',
+    padding: 15,
     borderRadius: 8,
-    alignItems: 'center', 
-    marginTop: 10
+    alignItems: 'center',
+    marginTop: 10,
   },
-  buttonPrimaryText: { 
-    color: '#FFF', 
-    fontSize: 16, 
-    fontWeight: 'bold' 
+  buttonPrimaryText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   backButton: {
-    backgroundColor: '#333', 
-    padding: 12, 
+    backgroundColor: '#333',
+    padding: 12,
     borderRadius: 8,
-    alignItems: 'center', 
-    marginTop: 15
+    alignItems: 'center',
+    marginTop: 15,
   },
-  backButtonText: { 
-    color: '#FFF', 
-    fontSize: 14, 
-    fontWeight: '600' 
-  }
+  backButtonText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
 });

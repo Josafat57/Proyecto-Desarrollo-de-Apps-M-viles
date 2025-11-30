@@ -89,103 +89,103 @@ export default function InicioSesion({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { 
-    flex: 1, 
-    backgroundColor: '#000' 
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#000',
   },
-  container: { 
-    flexGrow: 1, 
-    justifyContent: 'center', 
-    paddingHorizontal: 25, 
-    paddingBottom: 20 
+  container: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 25,
+    paddingBottom: 20,
   },
-  logoContainer: { 
-    alignItems: 'center', 
-    marginBottom: 30 
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
   },
-  logo: { 
-    width: 100, 
-    height: 100, 
-    resizeMode: 'contain', 
-    marginBottom: 10 
+  logo: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+    marginBottom: 10,
   },
-  title: { 
-    color: '#4CD964', 
-    fontSize: 34, 
-    fontWeight: 'bold' 
+  title: {
+    color: '#4CD964',
+    fontSize: 34,
+    fontWeight: 'bold',
   },
-  subtitle: { 
-    color: '#4CD964', 
-    fontSize: 13, 
-    fontWeight: '300', 
-    letterSpacing: 1 
+  subtitle: {
+    color: '#4CD964',
+    fontSize: 13,
+    fontWeight: '300',
+    letterSpacing: 1,
   },
-  formContainer: { 
-    width: '100%', 
-    marginBottom: 20 
+  formContainer: {
+    width: '100%',
+    marginBottom: 20,
   },
-  header: { 
-    color: '#FFF', 
-    fontSize: 26, 
-    fontWeight: 'bold', 
-    textAlign: 'center', 
-    marginBottom: 8 
+  header: {
+    color: '#FFF',
+    fontSize: 26,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 8,
   },
-  instructions: { 
-    color: '#BDBDBD', 
-    fontSize: 16, 
-    textAlign: 'center', 
-    marginBottom: 25 
+  instructions: {
+    color: '#BDBDBD',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 25,
   },
   input: {
-    backgroundColor: '#FFF', 
-    color: '#000', 
+    backgroundColor: '#FFF',
+    color: '#000',
     borderRadius: 8,
-    paddingVertical: 14, 
-    paddingHorizontal: 16, 
-    fontSize: 16, 
-    marginBottom: 15
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    marginBottom: 15,
   },
   input2: {
-    backgroundColor: '#FFF', 
-    color: '#000', 
+    backgroundColor: '#FFF',
+    color: '#000',
     borderRadius: 8,
-    paddingVertical: 14, 
-    paddingHorizontal: 16, 
-    fontSize: 16, 
-    marginBottom: 12
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    marginBottom: 12,
   },
-  forgotPasswordButton: { 
-    alignItems: 'flex-end', 
-    marginBottom: 20 
+  forgotPasswordButton: {
+    alignItems: 'flex-end',
+    marginBottom: 20,
   },
-  forgotPasswordText: { 
-    color: '#007AFF', 
-    fontSize: 14, 
-    fontWeight: '600' 
+  forgotPasswordText: {
+    color: '#007AFF',
+    fontSize: 14,
+    fontWeight: '600',
   },
-  buttonPrimary: { 
-    backgroundColor: '#007AFF', 
-    padding: 15, 
-    borderRadius: 8, 
-    alignItems: 'center' 
+  buttonPrimary: {
+    backgroundColor: '#007AFF',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
   },
-  buttonPrimaryText: { 
-    color: '#FFF', 
-    fontSize: 16, 
-    fontWeight: 'bold' 
+  buttonPrimaryText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
-  registerContainer: { 
-    alignItems: 'center', 
-    marginTop: 20, 
-    flexDirection: 'row', 
-    justifyContent: 'center' 
+  registerContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  termsText: { 
-    color: '#8E8E93', 
-    fontSize: 14 
+  termsText: {
+    color: '#8E8E93',
+    fontSize: 14,
   },
-  termsLink: { 
-    color: '#4CD964' 
-  }
+  termsLink: {
+    color: '#4CD964',
+  },
 });

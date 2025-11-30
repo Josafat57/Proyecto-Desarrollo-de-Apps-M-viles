@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, ScrollView } from 'react-native';
+import { insertTransaccion } from './database/Database';
 
 export default function RetirarDineroScreen() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -7,12 +8,20 @@ export default function RetirarDineroScreen() {
   const [cuentaDestino, setCuentaDestino] = useState('');
   const [concepto, setConcepto] = useState('');
 
-  const handleRetirar = () => {
-    console.log('Retirando:', { monto, cuentaDestino, concepto });
-    setModalVisible(false);
-    setMonto('');
-    setCuentaDestino('');
-    setConcepto('');
+  const handleRetirar = async () => {
+    try {
+      // 👇 Guardamos la transacción como "gasto"
+      await insertTransaccion(monto, cuentaDestino, concepto, 'gasto');
+      console.log('Retiro registrado:', { monto, cuentaDestino, concepto });
+
+      // Cerramos modal y limpiamos campos
+      setModalVisible(false);
+      setMonto('');
+      setCuentaDestino('');
+      setConcepto('');
+    } catch (error) {
+      console.error('Error al registrar retiro:', error);
+    }
   };
 
   return (
@@ -112,30 +121,148 @@ export default function RetirarDineroScreen() {
 }
 
 const styles = StyleSheet.create({
-  container:{ flex:1, backgroundColor:'#000', paddingHorizontal:16, paddingTop:20 },
-  header:{ flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginBottom:24 },
-  headerTitle:{ color:'#fff', fontSize:18, fontWeight:'600' },
-  avatar:{ width:28, height:28, borderRadius:14, backgroundColor:'#666' },
-  card:{ backgroundColor:'#fff', borderRadius:12, padding:20, marginBottom:16 },
-  cardTitle:{ fontSize:18, fontWeight:'600', marginBottom:4 },
-  cardSubtitle:{ fontSize:13, color:'#444', marginBottom:20 },
-  amount:{ fontSize:36, fontWeight:'700', marginBottom:20 },
-  retirarButton:{ backgroundColor:'#000', paddingVertical:15, borderRadius:8, alignItems:'center' },
-  retirarButtonText:{ color:'#fff', fontSize:16, fontWeight:'600' },
-  modalContainer:{ flex:1, justifyContent:'flex-end', backgroundColor:'rgba(0,0,0,0.5)' },
-  modalContent:{ backgroundColor:'#fff', borderTopLeftRadius:20, borderTopRightRadius:20, maxHeight:'80%' },
-  modalHeader:{ flexDirection:'row', justifyContent:'space-between', alignItems:'center', padding:20, borderBottomWidth:1, borderBottomColor:'#eee' },
-  modalTitle:{ fontSize:20, fontWeight:'600' },
-  closeButton:{ padding:5 },
-  closeButtonText:{ fontSize:18, fontWeight:'600', color:'#666' },
-  formContainer:{ padding:20 },
-  label:{ fontSize:16, fontWeight:'600', marginBottom:8, color:'#333' },
-  input:{ borderWidth:1, borderColor:'#ddd', borderRadius:8, padding:12, fontSize:16, marginBottom:20, backgroundColor:'#f9f9f9' },
-  textArea:{ height:80, textAlignVertical:'top' },
-  confirmButton:{ backgroundColor:'#000', paddingVertical:15, borderRadius:8, alignItems:'center', marginTop:10 },
-  confirmButtonDisabled:{ backgroundColor:'#ccc' },
-  confirmButtonText:{ color:'#fff', fontSize:16, fontWeight:'600' },
-  bottomBar:{ position:'absolute', bottom:0, left:0, right:0, backgroundColor:'#000', paddingVertical:15, alignItems:'center', borderTopWidth:1, borderTopColor:'#333' },
-  bottomImage:{ width:40, height:40, marginBottom:5 },
-  bottomText:{ color:'green', fontSize:16, fontWeight:'600' }
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
+    paddingHorizontal: 16,
+    paddingTop: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  avatar: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#666',
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 16,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  cardSubtitle: {
+    fontSize: 13,
+    color: '#444',
+    marginBottom: 20,
+  },
+  amount: {
+    fontSize: 36,
+    fontWeight: '700',
+    marginBottom: 20,
+  },
+  retirarButton: {
+    backgroundColor: '#000',
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  retirarButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: '80%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  closeButton: {
+    padding: 5,
+  },
+  closeButtonText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#666',
+  },
+  formContainer: {
+    padding: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+    color: '#333',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 20,
+    backgroundColor: '#f9f9f9',
+  },
+  textArea: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  confirmButton: {
+    backgroundColor: '#000',
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  confirmButtonDisabled: {
+    backgroundColor: '#ccc',
+  },
+  confirmButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  bottomBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#000',
+    paddingVertical: 15,
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#333',
+  },
+  bottomImage: {
+    width: 40,
+    height: 40,
+    marginBottom: 5,
+  },
+  bottomText: {
+    color: 'green',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });

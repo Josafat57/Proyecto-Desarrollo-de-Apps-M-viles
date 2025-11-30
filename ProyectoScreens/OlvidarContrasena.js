@@ -107,7 +107,13 @@ export default function OlvidarContrasena({ navigation }) {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#000'
+        backgroundColor: '#000',
+    },
+    container: {
+        flexGrow: 1,
+        paddingHorizontal: 25,
+        paddingBottom: 20,
+        paddingTop: 10,
     },
     headerBar: {
         paddingHorizontal: 20,
@@ -118,45 +124,50 @@ const styles = StyleSheet.create({
     backIcon: {
         padding: 5,
     },
-    container: {
-        flexGrow: 1,
-        paddingHorizontal: 25,
-        paddingBottom: 20,
-        paddingTop: 10
-    },
     logoContainer: {
         alignItems: 'center',
-        marginBottom: 20
+        marginBottom: 20,
     },
     logo: {
         width: 80,
         height: 80,
         resizeMode: 'contain',
-        marginBottom: 10
+        marginBottom: 10,
     },
     title: {
         color: '#4CD964',
         fontSize: 30,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     subtitle: {
         color: '#4CD964',
         fontSize: 12,
         fontWeight: '300',
-        letterSpacing: 1
+        letterSpacing: 1,
+    },
+    formContainer: {
+        width: '100%',
+        marginBottom: 20,
     },
     header: {
         color: '#FFF',
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: 8
+        marginBottom: 8,
     },
     instructions: {
         color: '#BDBDBD',
         fontSize: 15,
         textAlign: 'center',
-        marginBottom: 20
+        marginBottom: 20,
+    },
+    input: {
+        backgroundColor: '#FFF',
+        borderRadius: 8,
+        padding: 14,
+        fontSize: 16,
+        marginBottom: 15,
     },
     questionLabel: {
         color: '#4CD964',
@@ -168,29 +179,18 @@ const styles = StyleSheet.create({
         borderColor: '#4CD964',
         padding: 10,
         borderRadius: 8,
-        width: '100%'
-    },
-    input: {
-        backgroundColor: '#FFF',
-        borderRadius: 8,
-        padding: 14,
-        fontSize: 16,
-        marginBottom: 15
-    },
-    formContainer: {
         width: '100%',
-        marginBottom: 20
     },
     buttonPrimary: {
         backgroundColor: '#007AFF',
         padding: 15,
         borderRadius: 8,
         alignItems: 'center',
-        marginTop: 10
+        marginTop: 10,
     },
     buttonPrimaryText: {
         color: '#FFF',
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
 });

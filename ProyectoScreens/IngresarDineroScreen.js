@@ -257,114 +257,112 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
     paddingHorizontal: 16,
-    paddingTop: 20
+    paddingTop: 20,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 24
-  },
-  backArrow: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: '600'
+    marginBottom: 24,
   },
   headerTitle: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: '600'
+    fontWeight: '600',
+  },
+  backArrow: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: '600',
   },
   avatar: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#666' 
+    backgroundColor: '#666',
   },
   card: {
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
-    marginBottom: 16
+    marginBottom: 16,
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 4
+    marginBottom: 4,
   },
   cardSubtitle: {
     fontSize: 13,
     color: '#444',
-    marginBottom: 20
+    marginBottom: 20,
   },
   amount: {
     fontSize: 36,
     fontWeight: '700',
-    marginBottom: 20
+    marginBottom: 20,
   },
   ingresarButton: {
     backgroundColor: '#007AFF',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   ingresarButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
   },
- 
-modalOverlay: {  
-  flex: 1,
-  justifyContent: 'flex-end',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)'
-},
-modalContent: {
-  backgroundColor: '#fff',
-  borderTopLeftRadius: 20,
-  borderTopRightRadius: 20,
-  maxHeight: '90%',
-  width: '100%', 
-  marginHorizontal: 0,  
-},
-
-scrollContent: {
-  padding: 20,
-  paddingBottom: 30
-},
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: '90%',
+    width: '100%',
+    marginHorizontal: 0,
+  },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0'
+    borderBottomColor: '#f0f0f0',
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#000'
+    color: '#000',
   },
   closeButton: {
-    padding: 5
+    padding: 5,
   },
   closeButtonText: {
     fontSize: 24,
     color: '#666',
-    fontWeight: '300'
+    fontWeight: '300',
   },
   formContainer: {
-    padding: 20
+    padding: 20,
+  },
+  scrollContent: {
+    padding: 20,
+    paddingBottom: 30,
   },
   inputGroup: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   label: {
     fontSize: 14,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 8
+    marginBottom: 8,
   },
   amountInputContainer: {
     flexDirection: 'row',
@@ -372,19 +370,19 @@ scrollContent: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
-    paddingHorizontal: 12
+    paddingHorizontal: 12,
   },
   currencySymbol: {
     fontSize: 18,
     fontWeight: '600',
     color: '#333',
-    marginRight: 8
+    marginRight: 8,
   },
   amountInput: {
     flex: 1,
     fontSize: 18,
     paddingVertical: 12,
-    color: '#000'
+    color: '#000',
   },
   textInput: {
     borderWidth: 1,
@@ -393,11 +391,11 @@ scrollContent: {
     padding: 12,
     fontSize: 16,
     color: '#000',
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
   },
   paymentMethods: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   paymentMethod: {
     flex: 1,
@@ -406,41 +404,41 @@ scrollContent: {
     borderColor: '#ddd',
     borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal: 4
+    marginHorizontal: 4,
   },
   paymentMethodSelected: {
     borderColor: '#007AFF',
-    backgroundColor: '#007AFF10'
+    backgroundColor: '#007AFF10',
   },
   paymentMethodText: {
     fontSize: 14,
-    color: '#666'
+    color: '#666',
   },
   paymentMethodTextSelected: {
     color: '#007AFF',
-    fontWeight: '600'
+    fontWeight: '600',
   },
   infoBox: {
     backgroundColor: '#f8f9fa',
     padding: 15,
     borderRadius: 8,
-    marginBottom: 20
+    marginBottom: 20,
   },
   infoTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 8
+    marginBottom: 8,
   },
   infoText: {
     fontSize: 12,
     color: '#666',
-    lineHeight: 18
+    lineHeight: 18,
   },
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10
+    marginTop: 10,
   },
   cancelButton: {
     flex: 1,
@@ -449,27 +447,27 @@ scrollContent: {
     borderColor: '#ddd',
     borderRadius: 8,
     alignItems: 'center',
-    marginRight: 10
+    marginRight: 10,
   },
   cancelButtonText: {
     color: '#666',
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   confirmButton: {
     flex: 2,
     padding: 15,
     backgroundColor: '#000000ff',
     borderRadius: 8,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   confirmButtonDisabled: {
-    backgroundColor: '#ccc'
+    backgroundColor: '#ccc',
   },
   confirmButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   bottomBar: {
     position: 'absolute',
@@ -480,18 +478,18 @@ scrollContent: {
     paddingVertical: 15,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: '#333'
+    borderTopColor: '#333',
   },
   bottomImage: {
     width: 40,
     height: 40,
-    marginBottom: 5
+    marginBottom: 5,
   },
   bottomText: {
     color: 'green',
     fontSize: 16,
-    fontWeight: '600'
-  }
+    fontWeight: '600',
+  },
 });
 
 export default IngresarDineroScreen;
