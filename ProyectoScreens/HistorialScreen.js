@@ -4,7 +4,6 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-nati
 export default function HistorialScreen() {
   return (
     <View style={styles.container}>
-
       <Text style={styles.header}>App+</Text>
 
       <View style={styles.botones}>
@@ -19,7 +18,6 @@ export default function HistorialScreen() {
         </TouchableOpacity>
       </View>
 
-     
       <ScrollView style={styles.caja}>
         <Text style={styles.titulo}>Aquí está tu historial</Text>
         <Text style={styles.subtitulo}>Ingresos y gastos</Text>
@@ -35,51 +33,13 @@ export default function HistorialScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-    padding: 20,
-  },
-  header: {
-    color: '#fff',
-    fontSize: 24,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  botones: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 15,
-  },
-  btn: {
-    backgroundColor: '#333',
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-  },
-  btnText: {
-    color: '#fff',
-    fontSize: 14,
-  },
-  caja: {
-    backgroundColor: '#fff',
-    borderRadius: 15,
-    padding: 15,
-  },
-  titulo: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  subtitulo: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 15,
-  },
-  item: {
-    marginBottom: 12,
-    fontSize: 14,
-    color: '#000',
-  },
+  container: { flex: 1, backgroundColor: '#000', padding: 20 },
+  header: { color: '#fff', fontSize: 24, textAlign: 'center', fontWeight: 'bold', marginBottom: 20 },
+  botones: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 15 },
+  btn: { backgroundColor: '#333', borderRadius: 20, paddingVertical: 8, paddingHorizontal: 20 },
+  btnText: { color: '#fff', fontSize: 14 },
+  caja: { backgroundColor: '#fff', borderRadius: 15, padding: 15 },
+  titulo: { fontSize: 18, fontWeight: 'bold', marginBottom: 5 },
+  subtitulo: { fontSize: 16, fontWeight: '600', marginBottom: 15 },
+  item: { marginBottom: 12, fontSize: 14, color: '#000' },
 });

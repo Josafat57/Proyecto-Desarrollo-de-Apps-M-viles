@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, ScrollView, Alert } from 'react-native';
 import { initDatabase, insertTransaccion } from './database/Database';
 
-
-const IngresarDineroScreen = ({ volver }) => {
+const IngresarDineroScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [monto, setMonto] = useState('');
   const [concepto, setConcepto] = useState('');
@@ -61,7 +60,7 @@ const IngresarDineroScreen = ({ volver }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={volver}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.backArrow}>{`<`}</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>App+</Text>
@@ -119,7 +118,6 @@ const IngresarDineroScreen = ({ volver }) => {
                 </View>
               </View>
 
-            
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Concepto (opcional)</Text>
                 <TextInput
@@ -183,7 +181,6 @@ const IngresarDineroScreen = ({ volver }) => {
                 </View>
               </View>
 
-             
               {metodoPago === 'transferencia' && (
                 <View style={styles.infoBox}>
                   <Text style={styles.infoTitle}>Transferencia Bancaria</Text>

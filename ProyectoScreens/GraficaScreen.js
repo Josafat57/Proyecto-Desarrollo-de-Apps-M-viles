@@ -4,15 +4,16 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'rea
 const GraficaScreen = () => {
   const [filtroActivo, setFiltroActivo] = useState('Mes');
   const MAX_BAR_HEIGHT = 180;
-  const maxValor = Math.max(datos[filtroActivo].ingresos, datos[filtroActivo].gastos);
-  const alturaIngresos = (datos[filtroActivo].ingresos / maxValor) * MAX_BAR_HEIGHT;
-  const alturaGastos = (datos[filtroActivo].gastos / maxValor) * MAX_BAR_HEIGHT;
 
   const datos = {
     Mes: { ingresos: 1260, gastos: 203.15 },
     Semana: { ingresos: 320, gastos: 85.50 },
     Año: { ingresos: 15200, gastos: 3400.75 },
   };
+
+  const maxValor = Math.max(datos[filtroActivo].ingresos, datos[filtroActivo].gastos);
+  const alturaIngresos = (datos[filtroActivo].ingresos / maxValor) * MAX_BAR_HEIGHT;
+  const alturaGastos = (datos[filtroActivo].gastos / maxValor) * MAX_BAR_HEIGHT;
 
   return (
     <View style={styles.screen}>
@@ -46,52 +47,27 @@ const GraficaScreen = () => {
 
           <Text style={styles.chartTitle}>Ingresos vs Gastos</Text>
 
-        <View style={styles.barChart}>
-          <View style={styles.barContainer}>
-            <View style={[styles.barIngresos, { height: alturaIngresos }]} />
-            <Text style={styles.barLabel}>{datos[filtroActivo].ingresos}</Text>
-            <Text style={styles.barText}>Ingresos</Text>
+          <View style={styles.barChart}>
+            <View style={styles.barContainer}>
+              <View style={[styles.barIngresos, { height: alturaIngresos }]} />
+              <Text style={styles.barLabel}>{datos[filtroActivo].ingresos}</Text>
+              <Text style={styles.barText}>Ingresos</Text>
+            </View>
+            <View style={styles.barContainer}>
+              <View style={[styles.barGastos, { height: alturaGastos }]} />
+              <Text style={styles.barLabel}>{datos[filtroActivo].gastos}</Text>
+              <Text style={styles.barText}>Gastos</Text>
+            </View>
           </View>
-          <View style={styles.barContainer}>
-            <View style={[styles.barGastos, { height: alturaGastos }]} />
-            <Text style={styles.barLabel}>{datos[filtroActivo].gastos}</Text>
-            <Text style={styles.barText}>Gastos</Text>
-          </View>
-        </View>
         </View>
       </ScrollView>
-
-      <View style={styles.navBar}>
-        <View style={styles.navIcon}>
-          <Image source={{ uri: 'https://i.postimg.cc/wT7wGbqr/minimal-house-icon-website-symbol-site-sign-ui-home-icon-home-creative-icon-minimalist-vector.jpg' }} style={styles.navLogo} />
-        </View>
-        <View style={styles.navIcon}>
-          <Image source={{ uri: 'https://i.postimg.cc/L5H8s1XP/images.jpg' }} style={styles.navLogo} />
-        </View>
-        <View style={styles.navIcon}>
-          <Image source={{ uri: 'https://i.postimg.cc/8cnT4np5/logo.png' }} style={styles.navLogo1} />
-        </View>
-        <View style={styles.navIcon}>
-          <Image source={{ uri: 'https://i.postimg.cc/7h6rcMb8/descarga.png' }} style={styles.navLogo} />
-        </View>
-        <View style={styles.navIcon}>
-          <Image source={{ uri: 'https://i.postimg.cc/N0YVS7P0/descarga-1.png' }} style={styles.navLogo} />
-        </View>
-      </View>
-      <Text style={styles.footerText}>App+ FINANZAS PERSONALES</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  scrollContent: {
-    paddingTop: 40,
-    paddingBottom: 100,
-  },
+  screen: { flex: 1, backgroundColor: '#000' },
+  scrollContent: { paddingTop: 40, paddingBottom: 100 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -99,23 +75,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  perfil: {
-    width: 100,
-    height: 40,
-    resizeMode: 'contain',
-    marginLeft: 280,
-  },
-  profileCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#ccc',
-  },
-  filters: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 20,
-  },
+  perfil: { width: 100, height: 40, resizeMode: 'contain', marginLeft: 280 },
+  profileCircle: { width: 32, height: 32, borderRadius: 16, backgroundColor: '#ccc' },
+  filters: { flexDirection: 'row', justifyContent: 'space-around', marginVertical: 20 },
   filterButtonActive: {
     backgroundColor: '#FF6F61',
     paddingVertical: 8,
@@ -128,14 +90,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 20,
   },
-  filterTextActive: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  filterText: {
-    color: '#333',
-    fontWeight: 'bold',
-  },
+  filterTextActive: { color: '#fff', fontWeight: 'bold' },
+  filterText: { color: '#333', fontWeight: 'bold' },
   graphBox: {
     backgroundColor: '#fff',
     marginHorizontal: 20,
@@ -150,83 +106,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  pieChartImage: {
-    width: '90%',
-    height: '90%',
-    resizeMode: 'contain',
-  },
-  chartTitle: {
-    color: '#000',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 10,
-    marginTop: 20,
-  },
-  barChart: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
-  },
-  barContainer: {
-    alignItems: 'center',
-  },
-  barIngresos: {
-    width: 60,
-    backgroundColor: '#3498db',
-    borderRadius: 8,
-  },
-  barGastos: {
-    width: 60,
-    backgroundColor: '#2ecc71',
-    borderRadius: 8,
-  },
-  barLabel: {
-    color: '#000',
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginTop: 6,
-  },
-  barText: {
-    color: '#000',
-    fontSize: 12,
-    marginTop: 2,
-  },
-  navBar: {
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 20,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-  },
-  navIcon: {
-    width: 24,
-    height: 24,
-    backgroundColor: '#ccc',
-    borderRadius: 12,
-  },
-  navLogo: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-  },
-  navLogo1: {
-    width: 80,
-    height: 90,
-    marginTop: -50,
-    marginLeft: -30,
-  },
-  footerText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
+  pieChartImage: { width: '90%', height: '90%', resizeMode: 'contain' },
+  chartTitle: { color: '#000', fontSize: 18, fontWeight: 'bold', marginLeft: 10, marginTop: 20 },
+  barChart: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 20 },
+  barContainer: { alignItems: 'center' },
+  barIngresos: { width: 60, backgroundColor: '#3498db', borderRadius: 8 },
+  barGastos: { width: 60, backgroundColor: '#2ecc71', borderRadius: 8 },
+  barLabel: { color: '#000', fontSize: 14, fontWeight: 'bold', marginTop: 6 },
+  barText: { color: '#000', fontSize: 12, marginTop: 2 },
 });
 
 export default GraficaScreen;

@@ -1,13 +1,16 @@
-import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native'
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 
-const GraficaScreen = () => {
+export default function PerfilScreen() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.userName}>Mario Castañeda</Text>
         <View style={styles.profileWrapper}>
-          <Image source={{ uri: 'https://i.postimg.cc/YqjVYCJ9/logo.jpg' }} style={styles.profileCircle} />
+          <Image
+            source={{ uri: 'https://i.postimg.cc/YqjVYCJ9/logo.jpg' }}
+            style={styles.profileCircle}
+          />
         </View>
       </View>
 
@@ -47,18 +50,10 @@ const GraficaScreen = () => {
         </View>
       </View>
 
-      <View style={styles.navBar}>
-        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/wT7wGbqr/minimal-house-icon-website-symbol-site-sign-ui-home-icon-home-creative-icon-minimalist-vector.jpg' }} style={styles.navLogo} /></View>
-        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/L5H8s1XP/images.jpg' }} style={styles.navLogo} /> </View>
-        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/8cnT4np5/logo.png' }} style={styles.navLogo1} /> </View>
-        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/7h6rcMb8/descarga.png' }} style={styles.navLogo} /> </View>
-        <View style={styles.navIcon}> <Image source={{ uri: 'https://i.postimg.cc/N0YVS7P0/descarga-1.png' }} style={styles.navLogo} /> </View>
-      </View>
-
       <Text style={styles.footerText}>App+ FINANZAS PERSONALES</Text>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -129,34 +124,6 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#FF6F61',
   },
-  navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 20,
-    backgroundColor: '#fff',
-    marginBottom: 10,
-    marginTop: 250,
-  },
-  navIcon: {
-    width: 20,
-    height: 20,
-    backgroundColor: '#ccc',
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  navLogo: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-  },
-  navLogo1: {
-    width: 80,
-    height: 90,
-    marginTop: -50,
-    marginLeft: -10,
-  },
   footerText: {
     color: '#fff',
     fontSize: 12,
@@ -165,5 +132,3 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-export default GraficaScreen;

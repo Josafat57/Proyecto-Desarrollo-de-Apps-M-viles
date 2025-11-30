@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 const logo = require('./assets/logo.png');
 
-export default function OlvidarContrasena() {
+export default function OlvidarContrasena({ navigation }) {
     const [email, setEmail] = useState('');
 
     return (
@@ -17,7 +17,9 @@ export default function OlvidarContrasena() {
 
                 <View style={styles.formContainer}>
                     <Text style={styles.header}>¿Olvidaste tu contraseña?</Text>
-                    <Text style={styles.instructions}>Introduce tu correo por dónde te enviaremos los pasos a seguir para cambiar tu contraseña</Text>
+                    <Text style={styles.instructions}>
+                        Introduce tu correo por dónde te enviaremos los pasos a seguir para cambiar tu contraseña
+                    </Text>
 
                     <TextInput
                         style={styles.input}
@@ -31,11 +33,23 @@ export default function OlvidarContrasena() {
 
                     <TouchableOpacity 
                         style={styles.buttonPrimary} 
-                        onPress={() => {}}
+                        onPress={() => {
+                            // Aquí iría la lógica real de envío de correo
+                            alert("Se ha enviado un correo con instrucciones");
+                        }}
                     >
-                    <Text style={styles.buttonPrimaryText}>Da clic aquí para que se le envíe un correo</Text>
+                        <Text style={styles.buttonPrimaryText}>
+                            Da clic aquí para que se le envíe un correo
+                        </Text>
                     </TouchableOpacity>
 
+                    {/* Botón para regresar al Login */}
+                    <TouchableOpacity 
+                        style={styles.backButton} 
+                        onPress={() => navigation.navigate('InicioSesion')}
+                    >
+                        <Text style={styles.backButtonText}>Volver al inicio de sesión</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -46,7 +60,7 @@ const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
         backgroundColor: '#000',
-        },
+    },
     container: {
         flexGrow: 1,
         justifyContent: 'center',
@@ -105,10 +119,23 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 8,
         alignItems: 'center',
+        marginBottom: 15,
     },
     buttonPrimaryText: {
         color: '#FFF',
         fontSize: 16,
         fontWeight: 'bold',
+        textAlign: 'center',
     },
+    backButton: {
+        backgroundColor: '#4CD964',
+        padding: 12,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    backButtonText: {
+        color: '#FFF',
+        fontSize: 14,
+        fontWeight: '600',
+    }
 });
