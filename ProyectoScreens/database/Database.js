@@ -167,6 +167,45 @@ class Database {
       };
     }
   }
+      async updateTransaccion(id, monto, concepto) {
+    if (Platform.OS === 'web') {
+      let transacciones = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+      const index = transacciones.findIndex(t => t.id === id);
+
+      if (index !== -1) {
+        transacciones[index].monto = parseFloat(monto);
+        transacciones[index].concepto = concepto;
+        localStorage.setItem(this.storageKey, JSON.stringify(transacciones));
+      }
+      return true;
+
+    } else {
+      await this.db.runAsync(
+        `UPDATE transacciones 
+         SET monto = ?, concepto = ?
+         WHERE id = ?`,
+        [parseFloat(monto), concepto, id]
+      );
+      return true;
+    }
+  }
+
+async deleteTransaccion(id) {
+  if (Platform.OS === 'web') {
+    let transacciones = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+    transacciones = transacciones.filter(t => t.id !== id);
+    localStorage.setItem(this.storageKey, JSON.stringify(transacciones));
+    return true;
+
+  } else {
+    await this.db.runAsync(
+      'DELETE FROM transacciones WHERE id = ?',
+      [id]
+    );
+    return true;
+  }
+}
+
 
   async getAll() {
     if (Platform.OS === 'web') {
@@ -260,6 +299,8 @@ const databaseService = new Database();
 export const initDatabase = () => databaseService.initialize();
 export const insertTransaccion = (m, c, con, t) => databaseService.insertTransaccion(m, c, con, t);
 export const getAllTransacciones = () => databaseService.getAll();
+export const actualizarTransaccion = (id, monto, concepto) => databaseService.updateTransaccion(id, monto, concepto);
+export const deleteTransaccion = (id) => databaseService.deleteTransaccion(id);
 export const getBalance = () => databaseService.getBalance();
 export const registerUser = (email, pass, preg, resp) => databaseService.registerUser(email, pass, preg, resp);
 export const loginUser = (email, pass) => databaseService.loginUser(email, pass);
