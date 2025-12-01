@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 
 import { initDatabase } from './database/Database';
 import InicioSesion from './InicioSesion';
@@ -82,11 +83,27 @@ function AuthStack() {
 }
 
 export default function App() {
+  const [isDbReady, setIsDbReady] = useState(false);
   useEffect(() => {
-    initDatabase();
-    console.log('Base de datos inicializada desde App.js');
+    const iniciarTodo = async () => {
+      try {
+        await initDatabase();
+        console.log('Base de datos inicializada desde App.js');
+      } catch (e) {
+        console.error("Error crítico DB:", e);
+      } finally {
+        setIsDbReady(true);
+      }
+    };
+    iniciarTodo();
   }, []);
-
+  if (!isDbReady) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
+        <ActivityIndicator size="large" color="#4CD964" />
+      </View>
+    );
+  }
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Auth">

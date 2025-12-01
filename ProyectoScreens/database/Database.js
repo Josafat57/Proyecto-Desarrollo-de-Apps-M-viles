@@ -6,9 +6,12 @@ class Database {
     this.db = null;
     this.storageKey = 'transacciones';
     this.userKey = 'usuarios_local';
+    this.budgetKey = 'presupuestos_local';
   }
 
   async initialize() {
+    if (this.db) return;
+
     try {
       if (Platform.OS === 'web') {
         console.log('Usando LocalStorage para web');
@@ -37,6 +40,16 @@ class Database {
             respuestaSeguridad TEXT
           );
         `);
+
+        await this.db.execAsync(`
+          CREATE TABLE IF NOT EXISTS presupuestos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            categoria TEXT UNIQUE,
+            montoLimite REAL
+          );
+        `);
+
+        await this.checkDefaultBudgets();
       }
       console.log('Base de datos inicializada');
     } catch (error) {
@@ -46,11 +59,60 @@ class Database {
   }
 
   initializeWebStorage() {
-    if (!localStorage.getItem(this.storageKey)) {
-      localStorage.setItem(this.storageKey, JSON.stringify([]));
+    if (!localStorage.getItem(this.storageKey)) localStorage.setItem(this.storageKey, JSON.stringify([]));
+    if (!localStorage.getItem(this.userKey)) localStorage.setItem(this.userKey, JSON.stringify([]));
+    if (!localStorage.getItem(this.budgetKey)) {
+      const defaults = [
+        { id: 1, categoria: 'restaurantes', montoLimite: 2000 },
+        { id: 2, categoria: 'supermercado', montoLimite: 3000 },
+        { id: 3, categoria: 'salud', montoLimite: 1500 },
+        { id: 4, categoria: 'servicios', montoLimite: 1000 },
+      ];
+      localStorage.setItem(this.budgetKey, JSON.stringify(defaults));
     }
-    if (!localStorage.getItem(this.userKey)) {
-      localStorage.setItem(this.userKey, JSON.stringify([]));
+  }
+
+  async checkDefaultBudgets() {
+    const result = await this.db.getFirstAsync('SELECT count(*) as count FROM presupuestos');
+    if (result.count === 0) {
+      await this.db.execAsync(`
+            INSERT INTO presupuestos (categoria, montoLimite) VALUES 
+            ('restaurantes', 2000),
+            ('supermercado', 3000),
+            ('salud', 1500),
+            ('servicios', 1000);
+        `);
+    }
+  }
+
+  async getPresupuestos() {
+    if (Platform.OS === 'web') {
+      return JSON.parse(localStorage.getItem(this.budgetKey) || '[]');
+    } else {
+      return await this.db.getAllAsync('SELECT * FROM presupuestos');
+    }
+  }
+
+  async updatePresupuesto(id, nuevoMonto) {
+    if (Platform.OS === 'web') {
+      const list = JSON.parse(localStorage.getItem(this.budgetKey));
+      const index = list.findIndex(i => i.id === id);
+      if (index !== -1) {
+        list[index].montoLimite = parseFloat(nuevoMonto);
+        localStorage.setItem(this.budgetKey, JSON.stringify(list));
+      }
+    } else {
+      await this.db.runAsync('UPDATE presupuestos SET montoLimite = ? WHERE id = ?', [parseFloat(nuevoMonto), id]);
+    }
+  }
+
+  async deletePresupuesto(id) {
+    if (Platform.OS === 'web') {
+      let list = JSON.parse(localStorage.getItem(this.budgetKey));
+      list = list.filter(i => i.id !== id);
+      localStorage.setItem(this.budgetKey, JSON.stringify(list));
+    } else {
+      await this.db.runAsync('DELETE FROM presupuestos WHERE id = ?', [id]);
     }
   }
 
@@ -58,7 +120,6 @@ class Database {
     if (Platform.OS === 'web') {
       const users = JSON.parse(localStorage.getItem(this.userKey) || '[]');
       if (users.find(u => u.email === email)) throw new Error('El usuario ya existe');
-
       const newUser = { id: Date.now(), email, password, preguntaSeguridad: pregunta, respuestaSeguridad: respuesta };
       users.push(newUser);
       localStorage.setItem(this.userKey, JSON.stringify(users));
@@ -83,10 +144,7 @@ class Database {
       if (!user) throw new Error('Credenciales inválidas');
       return user;
     } else {
-      const user = await this.db.getFirstAsync(
-        'SELECT * FROM users WHERE email = ? AND password = ?',
-        [email, password]
-      );
+      const user = await this.db.getFirstAsync('SELECT * FROM users WHERE email = ? AND password = ?', [email, password]);
       if (!user) throw new Error('Credenciales inválidas');
       return user;
     }
@@ -99,10 +157,7 @@ class Database {
       if (!user) throw new Error('Usuario no encontrado');
       return user.preguntaSeguridad;
     } else {
-      const user = await this.db.getFirstAsync(
-        'SELECT preguntaSeguridad FROM users WHERE email = ?',
-        [email]
-      );
+      const user = await this.db.getFirstAsync('SELECT preguntaSeguridad FROM users WHERE email = ?', [email]);
       if (!user) throw new Error('Usuario no encontrado');
       return user.preguntaSeguridad;
     }
@@ -112,25 +167,15 @@ class Database {
     if (Platform.OS === 'web') {
       let users = JSON.parse(localStorage.getItem(this.userKey) || '[]');
       const userIndex = users.findIndex(u => u.email === email);
-
       if (userIndex === -1) throw new Error('Usuario no encontrado');
       if (users[userIndex].respuestaSeguridad !== respuesta) throw new Error('Respuesta incorrecta');
-
       users[userIndex].password = newPassword;
       localStorage.setItem(this.userKey, JSON.stringify(users));
       return true;
     } else {
-      const user = await this.db.getFirstAsync(
-        'SELECT id FROM users WHERE email = ? AND respuestaSeguridad = ?',
-        [email, respuesta]
-      );
-
+      const user = await this.db.getFirstAsync('SELECT id FROM users WHERE email = ? AND respuestaSeguridad = ?', [email, respuesta]);
       if (!user) throw new Error('Respuesta incorrecta');
-
-      await this.db.runAsync(
-        'UPDATE users SET password = ? WHERE id = ?',
-        [newPassword, user.id]
-      );
+      await this.db.runAsync('UPDATE users SET password = ? WHERE id = ?', [newPassword, user.id]);
       return true;
     }
   }
@@ -138,17 +183,9 @@ class Database {
   async insertTransaccion(monto, cuentaDestino, concepto, tipo = 'ingreso') {
     const fecha = new Date().toISOString();
     const montoFloat = parseFloat(monto);
-
     if (Platform.OS === 'web') {
       const transacciones = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
-      const nuevaTransaccion = {
-        id: Date.now(),
-        tipo,
-        monto: montoFloat,
-        cuentaDestino,
-        concepto: concepto || '',
-        fecha
-      };
+      const nuevaTransaccion = { id: Date.now(), tipo, monto: montoFloat, cuentaDestino, concepto: concepto || '', fecha };
       transacciones.unshift(nuevaTransaccion);
       localStorage.setItem(this.storageKey, JSON.stringify(transacciones));
       return nuevaTransaccion;
@@ -157,55 +194,37 @@ class Database {
         'INSERT INTO transacciones (tipo, monto, cuentaDestino, concepto, fecha) VALUES (?, ?, ?, ?, ?)',
         [tipo, montoFloat, cuentaDestino, concepto || '', fecha]
       );
-      return {
-        id: result.lastInsertRowId,
-        tipo,
-        monto: montoFloat,
-        concepto: concepto || '',
-        cuentaDestino,
-        fecha
-      };
+      return { id: result.lastInsertRowId, tipo, monto: montoFloat, concepto: concepto || '', cuentaDestino, fecha };
     }
   }
-      async updateTransaccion(id, monto, concepto) {
+
+  async updateTransaccion(id, monto, concepto) {
     if (Platform.OS === 'web') {
       let transacciones = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
       const index = transacciones.findIndex(t => t.id === id);
-
       if (index !== -1) {
         transacciones[index].monto = parseFloat(monto);
         transacciones[index].concepto = concepto;
         localStorage.setItem(this.storageKey, JSON.stringify(transacciones));
       }
       return true;
-
     } else {
-      await this.db.runAsync(
-        `UPDATE transacciones 
-         SET monto = ?, concepto = ?
-         WHERE id = ?`,
-        [parseFloat(monto), concepto, id]
-      );
+      await this.db.runAsync('UPDATE transacciones SET monto = ?, concepto = ? WHERE id = ?', [parseFloat(monto), concepto, id]);
       return true;
     }
   }
 
-async deleteTransaccion(id) {
-  if (Platform.OS === 'web') {
-    let transacciones = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
-    transacciones = transacciones.filter(t => t.id !== id);
-    localStorage.setItem(this.storageKey, JSON.stringify(transacciones));
-    return true;
-
-  } else {
-    await this.db.runAsync(
-      'DELETE FROM transacciones WHERE id = ?',
-      [id]
-    );
-    return true;
+  async deleteTransaccion(id) {
+    if (Platform.OS === 'web') {
+      let transacciones = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+      transacciones = transacciones.filter(t => t.id !== id);
+      localStorage.setItem(this.storageKey, JSON.stringify(transacciones));
+      return true;
+    } else {
+      await this.db.runAsync('DELETE FROM transacciones WHERE id = ?', [id]);
+      return true;
+    }
   }
-}
-
 
   async getAll() {
     if (Platform.OS === 'web') {
@@ -223,79 +242,31 @@ async deleteTransaccion(id) {
         return trans.tipo === 'ingreso' ? total + trans.monto : total - trans.monto;
       }, 0);
     } else {
-      const result = await this.db.getFirstAsync(`
-        SELECT SUM(CASE WHEN tipo = 'ingreso' THEN monto ELSE -monto END) as balance FROM transacciones
-      `);
+      const result = await this.db.getFirstAsync("SELECT SUM(CASE WHEN tipo = 'ingreso' THEN monto ELSE -monto END) as balance FROM transacciones");
       return result?.balance || 0;
     }
   }
 
-  // Nuevo: ingresos y gastos por periodo (Mes, Semana, Año)
   async getStats(periodo = 'Mes') {
     if (Platform.OS === 'web') {
-      const transacciones = await this.getAll();
-      const ahora = new Date();
-
-      let inicio;
-      if (periodo === 'Mes') {
-        inicio = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
-      } else if (periodo === 'Semana') {
-        const diaSemana = ahora.getDay(); // 0 domingo
-        inicio = new Date(ahora);
-        inicio.setDate(ahora.getDate() - diaSemana);
-      } else if (periodo === 'Año') {
-        inicio = new Date(ahora.getFullYear(), 0, 1);
-      }
-
-      const filtradas = transacciones.filter(t => new Date(t.fecha) >= inicio);
-
-      const ingresos = filtradas
-        .filter(t => t.tipo === 'ingreso')
-        .reduce((sum, t) => sum + t.monto, 0);
-
-      const gastos = filtradas
-        .filter(t => t.tipo === 'gasto')
-        .reduce((sum, t) => sum + t.monto, 0);
-
-      return { ingresos, gastos };
+      return { ingresos: 0, gastos: 0 };
     } else {
       let query = '';
       if (periodo === 'Mes') {
-        query = `
-          SELECT 
-            SUM(CASE WHEN tipo='ingreso' THEN monto ELSE 0 END) as ingresos,
-            SUM(CASE WHEN tipo='gasto' THEN monto ELSE 0 END) as gastos
-          FROM transacciones
-          WHERE strftime('%Y-%m', fecha) = strftime('%Y-%m', 'now')
-        `;
+        query = "SELECT SUM(CASE WHEN tipo='ingreso' THEN monto ELSE 0 END) as ingresos, SUM(CASE WHEN tipo='gasto' THEN monto ELSE 0 END) as gastos FROM transacciones WHERE strftime('%Y-%m', fecha) = strftime('%Y-%m', 'now')";
       } else if (periodo === 'Semana') {
-        query = `
-          SELECT 
-            SUM(CASE WHEN tipo='ingreso' THEN monto ELSE 0 END) as ingresos,
-            SUM(CASE WHEN tipo='gasto' THEN monto ELSE 0 END) as gastos
-          FROM transacciones
-          WHERE strftime('%W', fecha) = strftime('%W', 'now')
-          AND strftime('%Y', fecha) = strftime('%Y', 'now')
-        `;
+        query = "SELECT SUM(CASE WHEN tipo='ingreso' THEN monto ELSE 0 END) as ingresos, SUM(CASE WHEN tipo='gasto' THEN monto ELSE 0 END) as gastos FROM transacciones WHERE strftime('%W', fecha) = strftime('%W', 'now') AND strftime('%Y', fecha) = strftime('%Y', 'now')";
       } else if (periodo === 'Año') {
-        query = `
-          SELECT 
-            SUM(CASE WHEN tipo='ingreso' THEN monto ELSE 0 END) as ingresos,
-            SUM(CASE WHEN tipo='gasto' THEN monto ELSE 0 END) as gastos
-          FROM transacciones
-          WHERE strftime('%Y', fecha) = strftime('%Y', 'now')
-        `;
+        query = "SELECT SUM(CASE WHEN tipo='ingreso' THEN monto ELSE 0 END) as ingresos, SUM(CASE WHEN tipo='gasto' THEN monto ELSE 0 END) as gastos FROM transacciones WHERE strftime('%Y', fecha) = strftime('%Y', 'now')";
       }
-
-    const result = await this.db.getFirstAsync(query);
-    return { ingresos: result?.ingresos || 0, gastos: result?.gastos || 0 };
+      const result = await this.db.getFirstAsync(query);
+      return { ingresos: result?.ingresos || 0, gastos: result?.gastos || 0 };
     }
   }
 }
 
 const databaseService = new Database();
 
-// Exportaciones
 export const initDatabase = () => databaseService.initialize();
 export const insertTransaccion = (m, c, con, t) => databaseService.insertTransaccion(m, c, con, t);
 export const getAllTransacciones = () => databaseService.getAll();
@@ -307,5 +278,8 @@ export const loginUser = (email, pass) => databaseService.loginUser(email, pass)
 export const getSecurityQuestion = (email) => databaseService.getSecurityQuestion(email);
 export const resetPassword = (email, resp, newPass) => databaseService.resetPassword(email, resp, newPass);
 export const getStats = (periodo) => databaseService.getStats(periodo);
+export const getPresupuestos = () => databaseService.getPresupuestos();
+export const updatePresupuesto = (id, monto) => databaseService.updatePresupuesto(id, monto);
+export const deletePresupuesto = (id) => databaseService.deletePresupuesto(id);
 
 export default databaseService;

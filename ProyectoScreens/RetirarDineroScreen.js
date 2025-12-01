@@ -1,46 +1,81 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, ScrollView } from 'react-native';
-import { insertTransaccion } from './database/Database';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, ScrollView, Alert } from 'react-native';
+import { insertTransaccion, getBalance } from './database/Database';
+import { useFocusEffect } from '@react-navigation/native';
 
-export default function RetirarDineroScreen() {
+export default function RetirarDineroScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [saldoActual, setSaldoActual] = useState(0);
   const [monto, setMonto] = useState('');
-  const [cuentaDestino, setCuentaDestino] = useState('');
-  const [concepto, setConcepto] = useState('');
+  const [categoria, setCategoria] = useState('');
+  const [conceptoExtra, setConceptoExtra] = useState('');
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchSaldo = async () => {
+        const total = await getBalance();
+        setSaldoActual(total);
+      };
+      fetchSaldo();
+    }, [])
+  );
 
   const handleRetirar = async () => {
-    try {
-      // 👇 Guardamos la transacción como "gasto"
-      await insertTransaccion(monto, cuentaDestino, concepto, 'gasto');
-      console.log('Retiro registrado:', { monto, cuentaDestino, concepto });
+    if (!monto || !categoria) {
+      Alert.alert("Faltan datos", "Debes ingresar monto y seleccionar una categoría.");
+      return;
+    }
 
-      // Cerramos modal y limpiamos campos
+    if (parseFloat(monto) > saldoActual) {
+      Alert.alert("Saldo insuficiente", "No tienes suficiente dinero.");
+      return;
+    }
+
+    try {
+      const conceptoFinal = conceptoExtra ? `${categoria} - ${conceptoExtra}` : categoria;
+      await insertTransaccion(monto, categoria, conceptoFinal, 'gasto');
+
+      setSaldoActual(prev => prev - parseFloat(monto));
+
       setModalVisible(false);
       setMonto('');
-      setCuentaDestino('');
-      setConcepto('');
+      setCategoria('');
+      setConceptoExtra('');
+      Alert.alert("Retiro Exitoso");
+
     } catch (error) {
       console.error('Error al registrar retiro:', error);
     }
   };
 
+  const CategoryBtn = ({ title, value }) => (
+    <TouchableOpacity
+      style={[styles.catBtn, categoria === value && styles.catBtnActive]}
+      onPress={() => setCategoria(value)}
+    >
+      <Text style={[styles.catText, categoria === value && styles.catTextActive]}>{title}</Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>App+</Text>
-        <View style={styles.avatar} />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.backArrow}>{`<`}</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Retirar Dinero</Text>
+        <View style={{ width: 24 }} />
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Retira tu dinero solo con efectivo en dónde sea</Text>
-        <Text style={styles.cardSubtitle}>Puedes retirar hasta $5,000 en efectivo</Text>
-        <Text style={styles.amount}>$ 0.00</Text>
+        <Text style={styles.cardTitle}>Saldo Disponible</Text>
+        <Text style={styles.amount}>$ {saldoActual.toFixed(2)}</Text>
 
         <TouchableOpacity
           style={styles.retirarButton}
           onPress={() => setModalVisible(true)}
         >
-          <Text style={styles.retirarButtonText}>Retirar Dinero</Text>
+          <Text style={styles.retirarButtonText}>- Registrar Gasto</Text>
         </TouchableOpacity>
       </View>
 
@@ -53,53 +88,45 @@ export default function RetirarDineroScreen() {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Retirar Dinero</Text>
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                style={styles.closeButton}
-              >
+              <Text style={styles.modalTitle}>Nuevo Gasto</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}>X</Text>
               </TouchableOpacity>
             </View>
 
             <ScrollView style={styles.formContainer}>
-              <Text style={styles.label}>Monto a retirar</Text>
+              <Text style={styles.label}>Monto</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Ingresa el monto"
+                placeholder="0.00"
                 placeholderTextColor="#999"
                 keyboardType="numeric"
                 value={monto}
                 onChangeText={setMonto}
               />
 
-              <Text style={styles.label}>Cuenta destino</Text>
+              <Text style={styles.label}>Categoría (Obligatorio para Presupuesto)</Text>
+              <View style={styles.categoriesContainer}>
+                <CategoryBtn title="🍔 Restaurante" value="restaurantes" />
+                <CategoryBtn title="🛒 Super" value="supermercado" />
+                <CategoryBtn title="💊 Salud" value="salud" />
+                <CategoryBtn title="💡 Servicios" value="servicios" />
+                <CategoryBtn title="👀 Otros" value="otros" />
+              </View>
+
+              <Text style={styles.label}>Nota (Opcional)</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Selecciona la cuenta destino"
+                placeholder="Detalle extra..."
                 placeholderTextColor="#999"
-                value={cuentaDestino}
-                onChangeText={setCuentaDestino}
-              />
-
-              <Text style={styles.label}>Concepto (opcional)</Text>
-              <TextInput
-                style={[styles.input, styles.textArea]}
-                placeholder="Describe el motivo del retiro"
-                placeholderTextColor="#999"
-                multiline={true}
-                numberOfLines={3}
-                value={concepto}
-                onChangeText={setConcepto}
+                value={conceptoExtra}
+                onChangeText={setConceptoExtra}
               />
 
               <TouchableOpacity
-                style={[
-                  styles.confirmButton,
-                  (!monto || !cuentaDestino) && styles.confirmButtonDisabled
-                ]}
+                style={[styles.confirmButton, (!monto || !categoria) && styles.confirmButtonDisabled]}
                 onPress={handleRetirar}
-                disabled={!monto || !cuentaDestino}
+                disabled={!monto || !categoria}
               >
                 <Text style={styles.confirmButtonText}>Confirmar Retiro</Text>
               </TouchableOpacity>
@@ -107,15 +134,6 @@ export default function RetirarDineroScreen() {
           </View>
         </View>
       </Modal>
-
-      <View style={styles.bottomBar}>
-        <Image
-          source={{ uri: 'https://i.postimg.cc/8cnT4np5/logo.png' }}
-          style={styles.bottomImage}
-          resizeMode="contain"
-        />
-        <Text style={styles.bottomText}>App+</Text>
-      </View>
     </View>
   );
 }
@@ -125,96 +143,86 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
     paddingHorizontal: 16,
-    paddingTop: 20,
+    paddingTop: 20
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 24
   },
   headerTitle: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '600'
   },
-  avatar: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#666',
+  backArrow: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: '600'
   },
   card: {
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
-    marginBottom: 16,
+    marginBottom: 16
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 4,
-  },
-  cardSubtitle: {
-    fontSize: 13,
-    color: '#444',
-    marginBottom: 20,
+    marginBottom: 4
   },
   amount: {
     fontSize: 36,
     fontWeight: '700',
-    marginBottom: 20,
+    marginBottom: 20
   },
   retirarButton: {
     backgroundColor: '#000',
     paddingVertical: 15,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   retirarButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   modalContent: {
     backgroundColor: '#fff',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    maxHeight: '80%',
+    maxHeight: '90%'
   },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderColor: '#eee'
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: '600',
-  },
-  closeButton: {
-    padding: 5,
+    fontWeight: '600'
   },
   closeButtonText: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#666',
+    color: '#666'
   },
   formContainer: {
-    padding: 20,
+    padding: 20
   },
   label: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
     color: '#333',
+    marginTop: 10
   },
   input: {
     borderWidth: 1,
@@ -222,47 +230,44 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    marginBottom: 20,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#f9f9f9'
   },
-  textArea: {
-    height: 80,
-    textAlignVertical: 'top',
+  categoriesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8
+  },
+  catBtn: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    backgroundColor: '#f0f0f0',
+    marginBottom: 5
+  },
+  catBtnActive: {
+    backgroundColor: '#007AFF'
+  },
+  catText: {
+    color: '#333'
+  },
+  catTextActive: {
+    color: '#fff',
+    fontWeight: 'bold'
   },
   confirmButton: {
     backgroundColor: '#000',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
+    marginBottom: 20
   },
   confirmButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#ccc'
   },
   confirmButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
-  },
-  bottomBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#000',
-    paddingVertical: 15,
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#333',
-  },
-  bottomImage: {
-    width: 40,
-    height: 40,
-    marginBottom: 5,
-  },
-  bottomText: {
-    color: 'green',
-    fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
 });

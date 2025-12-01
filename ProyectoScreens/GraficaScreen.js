@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react'; 
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import { getStats } from './database/Database';
+import { useFocusEffect } from '@react-navigation/native'; 
 
 const GraficaScreen = () => {
   const [filtroActivo, setFiltroActivo] = useState('Mes');
@@ -9,13 +10,15 @@ const GraficaScreen = () => {
 
   const screenWidth = Dimensions.get('window').width;
 
-  useEffect(() => {
-    const cargarDatos = async () => {
-      const stats = await getStats(filtroActivo);
-      setDatos(stats);
-    };
-    cargarDatos();
-  }, [filtroActivo]);
+  useFocusEffect(
+    useCallback(() => {
+      const cargarDatos = async () => {
+        const stats = await getStats(filtroActivo);
+        setDatos(stats);
+      };
+      cargarDatos();
+    }, [filtroActivo]) 
+  );
 
   const dataBar = {
     labels: ['Ingresos', 'Gastos'],
@@ -56,17 +59,18 @@ const GraficaScreen = () => {
       </View>
 
       <View style={styles.graphBox}>
-        <Text style={styles.chartTitle}>Ingresos vs Gastos</Text>
+        <Text style={styles.chartTitle}>Ingresos vs Gastos ({filtroActivo})</Text>
 
         <BarChart
           data={dataBar}
           width={screenWidth - 40}
           height={220}
+          yAxisLabel="$"
           chartConfig={{
             backgroundColor: '#fff',
             backgroundGradientFrom: '#fff',
             backgroundGradientTo: '#fff',
-            decimalPlaces: 2,
+            decimalPlaces: 0,
             color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           }}
